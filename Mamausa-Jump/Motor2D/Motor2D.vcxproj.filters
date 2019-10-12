@@ -52,6 +52,9 @@
     <ClCompile Include="j1Globals.cpp">
       <Filter>Development  ========\Modules</Filter>
     </ClCompile>
+    <ClCompile Include="j1EntityManager.cpp">
+      <Filter>Development  ========\Modules</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="j1Window.h">
@@ -121,6 +124,9 @@
       <Filter>Development  ========\Modules</Filter>
     </ClInclude>
     <ClInclude Include="j1Globals.h">
+      <Filter>Development  ========\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="j1EntityManager.h">
       <Filter>Development  ========\Modules</Filter>
     </ClInclude>
   </ItemGroup>
