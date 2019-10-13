@@ -55,8 +55,10 @@ void j1Map::Draw()
 					iPoint pos = MapToWorld(x, y);
 					
 					
-					App->render->Blit(tileset->texture, pos.x, pos.y, &r);
-
+					if (item->data->name == "Map")
+						App->render->Blit(tileset->texture, pos.x, pos.y, &r);
+					else if (item->data->name == "Background")
+						App->render->Blit(tileset->texture, pos.x, pos.y, &r, 0.05f);
 					
 
 				}
