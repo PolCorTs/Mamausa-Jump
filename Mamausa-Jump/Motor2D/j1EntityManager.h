@@ -5,7 +5,7 @@
 #include "p2Defs.h"
 #include "p2List.h"
 #include "p2Point.h"
-#include "j1Entity.h"
+//#include "j1Entity.h"
 
 #define MAX_ENTITIES 100
 
@@ -47,9 +47,9 @@ public:
 
 	j1Entity* CreateEntity(ENTITY_TYPES type, int x = 0, int y = 0);
 
-	void OnCollision(Collider* c1, Collider* c2);
+	/*void OnCollision(Collider* c1, Collider* c2);
 	void CreatePlayer();
-	/*void AddEnemy(int x, int y, ENTITY_TYPES type);
+	void AddEnemy(int x, int y, ENTITY_TYPES type);
 	void DestroyEntities();*/
 
 public:

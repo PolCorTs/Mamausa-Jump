@@ -45,7 +45,7 @@ bool j1Render::Awake(pugi::xml_node& config)
 		camera.w = App->win->screen_surface->w;
 		camera.h = App->win->screen_surface->h;
 		camera.x = 0;
-		camera.y = 0;
+		camera.y = -400;
 		virtual_camera_pos = camera.x;
 		
 	}
@@ -72,7 +72,7 @@ bool j1Render::PreUpdate()
 bool j1Render::Update(float dt)
 {
 
-	camera.x = virtual_camera_pos;
+	//camera.x = virtual_camera_pos;
 
 	return true;
 }
