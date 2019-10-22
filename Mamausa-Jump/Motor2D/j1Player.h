@@ -1,47 +1,126 @@
-//#ifndef __ModulePlayer_H__
-//#define __ModulePlayer_H__
-//
-//#include "j1Module.h"
-//#include "j1Animation.h"
-//#include "j1Globals.h"
-//#include "p2Point.h"
-//
-//struct SDL_Texture;
-//struct Collider;
-//
-//class j1Player : public j1Module
-//{
-//public:
-//	j1Player();
-//	~j1Player();
-//
-//	bool Start();
-//	update_status Update();
-//	bool CleanUp();
-//	void OnCollision(Collider* collider1, Collider* collider2);
-//	void resetPlayer();
-//
-//public:
-//	bool enable_movement = false;
-//	int counter = 0;
-//	int speed = 2;
-//	SDL_Texture * graphics = nullptr;
-//	j1Animation idle;
-//	j1Animation forward;
-//	j1Animation backward;
-//	j1Animation upward;
-//	j1Animation downward;
-//	j1Animation upwardreturn;
-//	j1Animation downwardreturn;
-//	j1Animation* current_animation;
-//	iPoint pos_map_layer;
-//	iPoint camera_offset;
-//	Uint32 start_time;
-//	Uint32 aux_time;
-//	Collider* collider;
-//	bool dead = false;
-//	bool godmode = false;
-//	char _godmode[8] = "godmode";
-//};
-//
-//#endif
+#ifndef __j1PLAYER_H__
+#define __j1PLAYER_H__
+
+#include "PugiXml/src/pugixml.hpp"
+#include "p2Point.h"
+#include "j1Animation.h"
+#include "j1Entity.h"
+
+struct SDL_Texture;
+struct Collider;
+class j1Hud;
+
+class j1Player : public j1Entity
+{
+
+public:
+	j1Player(int x, int y, ENTITY_TYPES type);
+
+	// Destructor
+	virtual ~j1Player();
+
+	// Called before the first frame
+	bool Start();
+
+	// Called each loop iteration
+	bool PreUpdate();
+	bool Update(float dt, bool do_logic);
+	bool PostUpdate();
+
+	// Called before quitting
+	bool CleanUp();
+
+	// Called to check collisions
+	void OnCollision(Collider* c1, Collider* c2);
+
+	// Load / Save
+	bool Load(pugi::xml_node&);
+	bool Save(pugi::xml_node&) const;
+
+	void LoadPlayerProperties();
+	void UpdateCameraPosition();
+
+public:
+
+	// Animations of the player
+	/*Animation idle;
+	Animation run;
+	Animation jump;
+	Animation fall;
+	Animation godmode;
+	Animation attackRight;
+	Animation attackLeft;
+	Animation death;
+*/
+	// Sounds
+	uint deathSound;
+	uint jumpSound;
+	uint playerHurt;
+	uint attackSound;
+	uint lifeup;
+
+	bool facingRight = true;
+
+	fPoint initialPosition;
+
+	iPoint playerSize;
+	iPoint margin;
+
+	uint currentJumps;
+	uint initialJumps;
+	uint maxJumps;
+	uint colisionMargin;
+	uint deathByFallColliderHeight;
+	uint points = 0;
+	uint score_points = 0;
+	uint lives;
+
+	Collider* attackCollider = nullptr;
+
+	j1Hud* hud = nullptr;
+
+	// Attack values
+	int attackBlittingX;
+	int attackBlittingY;
+	int rightAttackSpawnPos;
+	int leftAttackSpawnPos;
+
+	float godModeSpeed;
+	float horizontalSpeed;
+	//Jumping speed
+	float initialVerticalSpeed;
+	float verticalSpeed;
+	// Free fall speed
+	float fallingSpeed;
+	float initialFallingSpeed;
+	// "Gravity"
+	float verticalAcceleration;
+
+	// It tells you wether the player has landed, has a wall in front, a wall behind or a wall above
+	bool feetOnGround = false;
+	bool wallInFront = false;
+	bool wallBehind = false;
+	bool wallAbove = false;
+
+	bool GodMode = false;
+	bool playerIdle = false;
+	bool jumping = false;
+	bool freefall = false;
+
+	bool player_start = false;
+	bool loading = false;
+	bool dead = false;
+	bool playedSound = false;
+	bool deathByFall = false;
+	bool attacking = false;
+	bool extra_life = false;
+
+	int cameraLimit;
+
+private:
+	int playerLimit;
+
+	bool loadedAudios = false;
+};
+
+#endif // __jPLAYER_H__

@@ -146,9 +146,9 @@ void j1Collision::DrawColliders()
 		case COLLIDER_WIN:		//Green															
 			App->render->DrawQuad(colliders[i]->rect, 0, 255, 0, alpha);
 			break;
-		//case COLLIDER_DEATH:	//Red
-		//	App->render->DrawQuad(colliders[i]->rect, 255, 0, 0, alpha);
-		//	break;
+		case COLLIDER_DEATH:	//Red
+			App->render->DrawQuad(colliders[i]->rect, 255, 0, 0, alpha);
+			break;
 		case COLLIDER_PLAYER:	//Dark green
 			App->render->DrawQuad(colliders[i]->rect, 0, 71, 49, alpha);
 			break;

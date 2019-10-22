@@ -82,10 +82,11 @@ j1Entity* j1EntityManager::CreateEntity(ENTITY_TYPES type, int x, int y)
 	{
 	case PLAYER:
 		ret = new j1Player(x, y, type);
-		if (ret != nullptr) entities.add(ret); 
+		if (ret != nullptr) entities.add(ret);
 		break;
 
-	return ret;
+		return ret;
+	}
 }
 
 void j1EntityManager::AddEnemy(int x, int y, ENTITY_TYPES type)
@@ -104,7 +105,7 @@ void j1EntityManager::AddEnemy(int x, int y, ENTITY_TYPES type)
 
 void j1EntityManager::OnCollision(Collider* c1, Collider* c2)
 {
-	for (p2List_item<j1Entity*>* it = entityList.start; it != nullptr; it = it->next)
+	for (p2List_item<j1Entity*>* it = entities.start; it != nullptr; it = it->next)
 	{
 		if (it->data->collider == c1)
 		{
@@ -117,7 +118,7 @@ void j1EntityManager::OnCollision(Collider* c1, Collider* c2)
 
 void j1EntityManager::CreatePlayer()
 {
-	player = (j1Player*)CreateEntity(PLAYER);
+	player = (j1Player*)CreateEntity(PLAYER,0,0);
 }
 
 bool j1EntityManager::Load(pugi::xml_node&)
