@@ -395,10 +395,6 @@ bool j1Player::CleanUp() {
 	if (attackCollider != nullptr)
 		attackCollider->to_delete = true;
 
-
-
-	RELEASE(hud);
-
 	return true;
 }
 

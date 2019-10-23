@@ -8,7 +8,6 @@
 
 struct SDL_Texture;
 struct Collider;
-class j1Hud;
 
 class j1Player : public j1Entity
 {
@@ -76,8 +75,6 @@ public:
 	uint lives;
 
 	Collider* attackCollider = nullptr;
-
-	j1Hud* hud = nullptr;
 
 	// Attack values
 	int attackBlittingX;

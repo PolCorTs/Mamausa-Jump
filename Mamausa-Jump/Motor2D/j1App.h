@@ -13,7 +13,7 @@ class j1Textures;
 class j1Audio;
 class j1Scene;
 class j1Map;
-class j1collision;
+class j1Collision;
 class j1EntityManager;
 class j1FadeToBlack;
 

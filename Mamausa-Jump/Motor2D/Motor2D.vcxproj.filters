@@ -40,9 +40,6 @@
     <ClCompile Include="j1Collision.cpp">
       <Filter>Development  ========\Modules</Filter>
     </ClCompile>
-    <ClCompile Include="j1Globals.cpp">
-      <Filter>Development  ========\Modules</Filter>
-    </ClCompile>
     <ClCompile Include="j1EntityManager.cpp">
       <Filter>Development  ========\Modules</Filter>
     </ClCompile>

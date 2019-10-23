@@ -80,7 +80,6 @@
     <ClCompile Include="j1EntityManager.cpp" />
     <ClCompile Include="j1Collision.cpp" />
     <ClCompile Include="j1FadeToBlack.cpp" />
-    <ClCompile Include="j1Globals.cpp" />
     <ClCompile Include="j1Main.cpp" />
     <ClCompile Include="j1App.cpp" />
     <ClCompile Include="j1Audio.cpp" />
