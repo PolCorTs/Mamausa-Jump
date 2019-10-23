@@ -30,7 +30,7 @@ bool j1Scene::Awake()
 // Called before the first frame
 bool j1Scene::Start()
 {
-	App->map->Load("map1.tmx");
+	App->map->Load("Map1.tmx");
 
 	return true;
 }
@@ -64,8 +64,19 @@ bool j1Scene::Update(float dt)
 
 	App->map->Draw();
 
+	//Camera Limits
+
 	if (App->render->camera.x > 0)
 		App->render->camera.x = 0;
+
+	if (App->render->camera.x < -7100)
+		App->render->camera.x = -7100;
+
+	if (App->render->camera.y > 0)
+		App->render->camera.y = 0;
+
+	if (App->render->camera.y < -400)
+		App->render->camera.y = -400;
 
 	int x, y;
 	App->input->GetMousePosition(x, y);
