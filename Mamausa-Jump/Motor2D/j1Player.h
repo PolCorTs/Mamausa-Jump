@@ -43,7 +43,7 @@ public:
 public:
 
 	// Animations of the player
-	/*Animation idle;
+	Animation idle;
 	Animation run;
 	Animation jump;
 	Animation fall;
@@ -51,7 +51,7 @@ public:
 	Animation attackRight;
 	Animation attackLeft;
 	Animation death;
-*/
+
 	// Sounds
 	uint deathSound;
 	uint jumpSound;

@@ -37,13 +37,7 @@
     <ClCompile Include="j1Player.cpp">
       <Filter>Development  ========\Modules</Filter>
     </ClCompile>
-    <ClCompile Include="j1Debug.cpp">
-      <Filter>Development  ========\Modules</Filter>
-    </ClCompile>
     <ClCompile Include="j1Collision.cpp">
-      <Filter>Development  ========\Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="j1FadeToBlack.cpp">
       <Filter>Development  ========\Modules</Filter>
     </ClCompile>
     <ClCompile Include="j1Globals.cpp">
@@ -53,6 +47,9 @@
       <Filter>Development  ========\Modules</Filter>
     </ClCompile>
     <ClCompile Include="j1Entity.cpp">
+      <Filter>Development  ========\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="j1FadeToBlack.cpp">
       <Filter>Development  ========\Modules</Filter>
     </ClCompile>
   </ItemGroup>
@@ -108,13 +105,7 @@
     <ClInclude Include="j1Player.h">
       <Filter>Development  ========\Modules</Filter>
     </ClInclude>
-    <ClInclude Include="j1Debug.h">
-      <Filter>Development  ========\Modules</Filter>
-    </ClInclude>
     <ClInclude Include="j1Collision.h">
-      <Filter>Development  ========\Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="j1FadeToBlack.h">
       <Filter>Development  ========\Modules</Filter>
     </ClInclude>
     <ClInclude Include="j1Globals.h">
@@ -131,6 +122,9 @@
     </ClInclude>
     <ClInclude Include="p2SString.h">
       <Filter>Programming 2 ===========</Filter>
+    </ClInclude>
+    <ClInclude Include="j1FadeToBlack.h">
+      <Filter>Development  ========\Modules</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -20,6 +20,10 @@
 	<godmode loop="true" speed="f">	
       <animation x="" y="" w="" h=""/>
 	</godmode>
+
+    <death loop="false" speed="f">
+      <animation x="" y="" w="" h=""/>
+    </death>
     
  </player>
 </animations>

@@ -15,6 +15,7 @@ class j1Scene;
 class j1Map;
 class j1collision;
 class j1EntityManager;
+class j1FadeToBlack;
 
 class j1App
 {
@@ -85,8 +86,9 @@ public:
 	j1Audio*			audio;
 	j1Scene*			scene;
 	j1Map*				map;
-	j1Collision*		collision;
+	j1Collision*		collision = nullptr;
 	j1EntityManager*	entity;
+	j1FadeToBlack*		fade;
 
 private:
 
