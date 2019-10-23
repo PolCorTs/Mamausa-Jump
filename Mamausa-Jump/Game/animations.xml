@@ -1,0 +1,25 @@
+<animations>
+  <player>
+    
+    <idle loop="true" speed="f">
+      <animation x="" y="" w="" h=""/>
+    </idle>
+
+    <run loop="true" speed="f">
+      <animation x="" y="" w="" h=""/>
+    </run>
+
+    <jump loop="true" speed="f">
+      <animation x="" y="" w="" h=""/>
+    </jump>
+
+    <fall loop="true" speed="f">
+      <animation x="" y="" w="" h=""/>
+    </fall>
+
+	<godmode loop="true" speed="f">	
+      <animation x="" y="" w="" h=""/>
+	</godmode>
+    
+ </player>
+</animations>

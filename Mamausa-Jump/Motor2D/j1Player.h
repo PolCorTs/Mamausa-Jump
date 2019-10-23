@@ -3,7 +3,7 @@
 
 #include "PugiXml/src/pugixml.hpp"
 #include "p2Point.h"
-#include "j1Animation.h"
+#include "p2animation.h"
 #include "j1Entity.h"
 
 struct SDL_Texture;
