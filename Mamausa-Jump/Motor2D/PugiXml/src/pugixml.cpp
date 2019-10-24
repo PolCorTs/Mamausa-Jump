@@ -7930,9 +7930,9 @@ PUGI__NS_BEGIN
 	struct xpath_context
 	{
 		xpath_node n;
-		size_t pos_map_layer, size;
+		size_t position, size;
 
-		xpath_context(const xpath_node& n_, size_t pos_map_layer_, size_t size_): n(n_), pos_map_layer(pos_map_layer_), size(size_)
+		xpath_context(const xpath_node& n_, size_t position_, size_t size_): n(n_), position(position_), size(size_)
 		{
 		}
 	};
@@ -8010,7 +8010,7 @@ PUGI__NS_BEGIN
 
 			while (PUGI__IS_CHARTYPE(*cur, ct_space)) ++cur;
 
-			// save lexeme pos_map_layer for error reporting
+			// save lexeme position for error reporting
 			_cur_lexeme_pos = cur;
 
 			switch (*cur)
@@ -8315,7 +8315,7 @@ PUGI__NS_BEGIN
 		ast_number_constant,			// number constant
 		ast_variable,					// variable
 		ast_func_last,					// last()
-		ast_func_pos_map_layer,				// pos_map_layer()
+		ast_func_position,				// position()
 		ast_func_count,					// count(left)
 		ast_func_id,					// id(left)
 		ast_func_local_name_0,			// local-name()
@@ -9373,8 +9373,8 @@ PUGI__NS_BEGIN
 			case ast_func_last:
 				return static_cast<double>(c.size);
 			
-			case ast_func_pos_map_layer:
-				return static_cast<double>(c.pos_map_layer);
+			case ast_func_position:
+				return static_cast<double>(c.position);
 
 			case ast_func_count:
 			{
@@ -9790,7 +9790,7 @@ PUGI__NS_BEGIN
 			{
 				xpath_node_set_raw set = _left->eval_node_set(c, stack, _test == predicate_constant_one ? nodeset_eval_first : nodeset_eval_all);
 
-				// either expression is a number or it contains pos_map_layer() call; sort by document order
+				// either expression is a number or it contains position() call; sort by document order
 				if (_test != predicate_posinv) set.sort_do();
 
 				bool once = eval_once(set.type(), eval);
@@ -9898,10 +9898,10 @@ PUGI__NS_BEGIN
 			if (_right) _right->optimize(alloc);
 			if (_next) _next->optimize(alloc);
 
-			// Rewrite [pos_map_layer()=expr] with [expr]
-			// Note that this step has to go before classification to recognize [pos_map_layer()=1]
+			// Rewrite [position()=expr] with [expr]
+			// Note that this step has to go before classification to recognize [position()=1]
 			if ((_type == ast_filter || _type == ast_predicate) &&
-				_right->_type == ast_op_equal && _right->_left->_type == ast_func_pos_map_layer && _right->_right->_rettype == xpath_type_number)
+				_right->_type == ast_op_equal && _right->_left->_type == ast_func_position && _right->_right->_rettype == xpath_type_number)
 			{
 				_right = _right->_right;
 			}
@@ -9922,7 +9922,7 @@ PUGI__NS_BEGIN
 			// Rewrite descendant-or-self::node()/child::foo with descendant::foo
 			// The former is a full form of //foo, the latter is much faster since it executes the node test immediately
 			// Do a similar kind of rewrite for self/descendant/descendant-or-self axes
-			// Note that we only rewrite pos_map_layerally invariant steps (//foo[1] != /descendant::foo[1])
+			// Note that we only rewrite positionally invariant steps (//foo[1] != /descendant::foo[1])
 			if (_type == ast_step && (_axis == axis_child || _axis == axis_self || _axis == axis_descendant || _axis == axis_descendant_or_self) && _left &&
 				_left->_type == ast_step && _left->_axis == axis_descendant_or_self && _left->_test == nodetest_type_node && !_left->_right &&
 				is_posinv_step())
@@ -9960,7 +9960,7 @@ PUGI__NS_BEGIN
 		{
 			switch (_type)
 			{
-			case ast_func_pos_map_layer:
+			case ast_func_position:
 			case ast_func_last:
 				return false;
 
@@ -10145,8 +10145,8 @@ PUGI__NS_BEGIN
 				break;
 			
 			case 'p':
-				if (name == PUGIXML_TEXT("pos_map_layer") && argc == 0)
-					return new (alloc_node()) xpath_ast_node(ast_func_pos_map_layer, xpath_type_number);
+				if (name == PUGIXML_TEXT("position") && argc == 0)
+					return new (alloc_node()) xpath_ast_node(ast_func_position, xpath_type_number);
 				
 				break;
 			

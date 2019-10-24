@@ -75,8 +75,8 @@ bool j1Scene::Update(float dt)
 	if (App->render->camera.y > 0)
 		App->render->camera.y = 0;
 
-	if (App->render->camera.y < -400)
-		App->render->camera.y = -400;
+	if (App->render->camera.y < -500)
+		App->render->camera.y = -500;
 
 	int x, y;
 	App->input->GetMousePosition(x, y);
