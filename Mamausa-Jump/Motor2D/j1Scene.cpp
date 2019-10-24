@@ -7,7 +7,10 @@
 #include "j1Render.h"
 #include "j1Window.h"
 #include "j1Map.h"
+#include "j1EntityManager.h"
 #include "j1Scene.h"
+#include "j1Player.h"
+
 
 j1Scene::j1Scene() : j1Module()
 {
@@ -31,6 +34,8 @@ bool j1Scene::Awake()
 bool j1Scene::Start()
 {
 	App->map->Load("Map1.tmx");
+
+	App->entity->CreateEntity(PLAYER,2,17);
 
 	return true;
 }
@@ -67,6 +72,9 @@ bool j1Scene::Update(float dt)
 
 	//Camera Limits
 
+	if (App->entity->player != nullptr)
+		App->render->camera.x = -App->entity->player->position.x;
+
 	if (App->render->camera.x > 0)
 		App->render->camera.x = 0;
 
@@ -76,8 +84,8 @@ bool j1Scene::Update(float dt)
 	if (App->render->camera.y > 0)
 		App->render->camera.y = 0;
 
-	if (App->render->camera.y < -500)
-		App->render->camera.y = -500;
+	if (App->render->camera.y < -400)
+		App->render->camera.y = -400;
 
 	int x, y;
 	App->input->GetMousePosition(x, y);

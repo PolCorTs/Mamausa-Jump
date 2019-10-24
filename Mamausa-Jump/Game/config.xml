@@ -2,7 +2,7 @@
 
 <config>
   <app>
-    <title>Game Development Testbed</title>
+    <title>MAMAUSA JUMP</title>
     <organization>UPC</organization>
   </app>
 	
@@ -18,6 +18,16 @@
     <fullscreen_window value="false"/>
   </window>
 
+<player>
+	<size width="18" height="23"/>
+	<margin x="2" y="2" colisionMargin="2"/>
+	<deathByFallCollider h="10"/>
+	<speed>
+	  <movement initialVertical="-150.0f" vertical="-150.0f" horizontal="80.0f" godmode="120.0f"/>
+	  <physics initialFalling="0.0f" falling="0.0f" acceleration="550.0f"  jumpNumber="0" maxJumps="2"/>
+	</speed>
+  </player>
+
   <file_system>
     <path>data.zip</path>
   </file_system>
@@ -25,5 +35,9 @@
   <map>
     <folder>maps/</folder>
   </map>
+
+ <scene1>
+	<initialPlayerPosition x="3" y="30"/>
+  </scene1>
 
 </config>

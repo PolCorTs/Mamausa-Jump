@@ -24,65 +24,32 @@ j1Player::j1Player(int x, int y, ENTITY_TYPES type) : j1Entity(x, y, ENTITY_TYPE
 
 j1Player::~j1Player() {}
 
-// Load assets
 bool j1Player::Start() {
 
-	// Textures are loaded
 	LOG("Loading player textures");
 	sprites = App->tex->Load("textures/Alienblue.png");
 
-	// Audios are loaded
-	/*LOG("Loading player audios");
-	if (!loadedAudios) {
-		deathSound = App->audio->LoadFx("audio/fx/death.wav");
-		playerHurt = App->audio->LoadFx("audio/fx/playerHurt.wav");
-		jumpSound = App->audio->LoadFx("audio/fx/jump.wav");
-		attackSound = App->audio->LoadFx("audio/fx/attack.wav");
-		lifeup = App->audio->LoadFx("audio/fx/1-up.wav");
-		loadedAudios = true;
-	}*/
-
 	LoadPlayerProperties();
 
-	animation = &idle;
-	currentJumps = initialJumps;
-
-	lives = 1;
-
-	// Setting player position
-	position.x = initialPosition.x;
-	position.y = initialPosition.y;
-
-	if (GodMode)
-		collider = App->collision->AddCollider({ (int)position.x + margin.x, (int)position.y + margin.y, playerSize.x, playerSize.y }, COLLIDER_NONE, App->entity);
-	else
-		collider = App->collision->AddCollider({ (int)position.x + margin.x, (int)position.y + margin.y, playerSize.x, playerSize.y }, COLLIDER_PLAYER, App->entity);
-
-	//attackCollider = App->collision->AddCollider({ (int)position.x + rightAttackSpawnPos, (int)position.y + margin.y, playerSize.x, playerSize.y }, COLLIDER_NONE, App->entity);
+    collider = App->collision->AddCollider({ (int)position.x + margin.x, (int)position.y + margin.y, playerSize.x, playerSize.y }, COLLIDER_PLAYER, App->entity);
 
 	player_start = true;
 	return true;
 }
 
-//Call modules before each loop iteration
 bool j1Player::PreUpdate() {
 
 		return true;
 }
 
-// Call modules on each loop iteration
 bool j1Player::Update(float dt, bool do_logic) {
-
-	// ---------------------------------------------------------------------------------------------------------------------
-	// CONTROL OF THE PLAYER
-	// ---------------------------------------------------------------------------------------------------------------------
 
 	if (player_start)
 	{
-		// GodMode controls
+
 		if (GodMode) {
 
-			//animation = &godmode;
+			animation = &idle;
 
 			if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT)
 			{
@@ -103,7 +70,7 @@ bool j1Player::Update(float dt, bool do_logic) {
 				position.y += godModeSpeed * dt;
 		}
 		else {
-			// Idle
+
 			if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_IDLE
 				&& App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_IDLE
 				&& attacking == false)
@@ -138,20 +105,15 @@ bool j1Player::Update(float dt, bool do_logic) {
 					animation = &idle;
 			}
 
-			// The player falls if he has no ground
 			if (feetOnGround == false && jumping == false) {
 
 				freefall = true;
-				/*if ((App->scene->active && App->scene->startup_time.Read() > 85)) {
-					position.y += fallingSpeed * dt;
-					fallingSpeed += verticalAcceleration * dt;
-				}*/
+				
 
 				if (!attacking)
 					animation = &fall;
 			}
 
-			// Jump controls
 			if (App->input->GetKey(SDL_SCANCODE_SPACE) == j1KeyState::KEY_DOWN) {
 				if ((currentJumps == initialJumps && freefall == true) || (currentJumps < maxJumps && freefall == false)) {
 					jumping = true;
@@ -284,7 +246,7 @@ bool j1Player::Update(float dt, bool do_logic) {
 		// DRAWING EVERYTHING ON THE SCREEN
 		// ---------------------------------------------------------------------------------------------------------------------	
 
-		if (points % 10 == 0 && !extra_life && points != 0)
+		/*if (points % 10 == 0 && !extra_life && points != 0)
 		{
 			lives++;
 			extra_life = true;
@@ -294,15 +256,15 @@ bool j1Player::Update(float dt, bool do_logic) {
 
 		else if (points % 10 != 0)
 			extra_life = false;
-
+*/
 		// Blitting the player
-		SDL_Rect r = animation->GetCurrentFrame(dt);
+		SDL_Rect r = { 0,281,168,236 };
 
 		if (!attacking) {
 			if (facingRight)
-				Draw(r);
+				Draw(r,false,0,0);
 			else
-				Draw(r, true);
+				Draw(r,true, 0,0);
 		}
 		else if (animation == &attackLeft || animation == &attackRight) {
 			if (facingRight)
@@ -533,8 +495,10 @@ void j1Player::LoadPlayerProperties() {
 
 	pugi::xml_document config_file;
 	config_file.load_file("config.xml");
+	
 	pugi::xml_node config;
 	config = config_file.child("config");
+	
 	pugi::xml_node player;
 	player = config.child("player");
 
@@ -544,12 +508,6 @@ void j1Player::LoadPlayerProperties() {
 	margin.x = player.child("margin").attribute("x").as_int();
 	margin.y = player.child("margin").attribute("y").as_int();
 	colisionMargin = player.child("margin").attribute("colisionMargin").as_uint();
-
-	// Copying attack values
-	attackBlittingX = player.child("attack").attribute("blittingX").as_int();
-	attackBlittingY = player.child("attack").attribute("blittingY").as_int();
-	rightAttackSpawnPos = player.child("attack").attribute("rightColliderSpawnPos").as_int();
-	leftAttackSpawnPos = player.child("attack").attribute("leftColliderSpawnPos").as_int();
 
 	// Copying values of the speed
 	pugi::xml_node speed = player.child("speed");
@@ -569,3 +527,4 @@ void j1Player::LoadPlayerProperties() {
 
 	deathByFallColliderHeight = player.child("deathByFallCollider").attribute("h").as_uint();
 }
+
