@@ -1,12 +1,13 @@
 <animations>
   <player>
-    
-    <idle loop="true" speed="f">
-      <animation x="" y="" w="" h=""/>
+	  
+    <idle loop="true" speed="1.0f">
+      <animation x="0" y="281" w="168" h="236"/>
     </idle>
 
-    <run loop="true" speed="f">
-      <animation x="" y="" w="" h=""/>
+    <run loop="true" speed="5.0f">
+      <animation  x="193" y="280" w="162" h="236"/>
+      <animation  x="368" y="281" w="163" h="237"/>
     </run>
 
     <jump loop="true" speed="f">

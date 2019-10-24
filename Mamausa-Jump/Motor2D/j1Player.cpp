@@ -29,8 +29,7 @@ bool j1Player::Start() {
 
 	// Textures are loaded
 	LOG("Loading player textures");
-	sprites = App->tex->Load("textures/p1_spritesheet.png");
-	sprites = App->tex->Load("textures/p1_walk.png");
+	sprites = App->tex->Load("textures/Alienblue.png");
 
 	// Audios are loaded
 	/*LOG("Loading player audios");
