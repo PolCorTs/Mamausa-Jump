@@ -35,7 +35,7 @@ bool j1Scene::Start()
 {
 	App->map->Load("Map1.tmx");
 
-	App->entity->CreateEntity(PLAYER,2,17);
+	App->entity->CreateEntity(PLAYER, 2, 17);
 
 	return true;
 }

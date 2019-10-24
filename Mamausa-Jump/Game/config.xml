@@ -19,8 +19,8 @@
   </window>
 
 <player>
-	<size width="18" height="23"/>
-	<margin x="2" y="2" colisionMargin="2"/>
+	<size width="62" height="85"/>
+	<margin x="0" y="8" colisionMargin="2"/>
 	<deathByFallCollider h="10"/>
 	<speed>
 	  <movement initialVertical="-150.0f" vertical="-150.0f" horizontal="80.0f" godmode="120.0f"/>
@@ -37,7 +37,7 @@
   </map>
 
  <scene1>
-	<initialPlayerPosition x="3" y="30"/>
+	<initialPlayerPosition x="2" y="17"/>
   </scene1>
 
 </config>

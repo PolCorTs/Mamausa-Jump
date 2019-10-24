@@ -14,6 +14,8 @@ j1Player::j1Player(int x, int y, ENTITY_TYPES type) : j1Entity(x, y, ENTITY_TYPE
 {
 	animation = NULL;
 
+	position = { (float)x, (float)y };
+
 	idle.LoadAnimations("idle");
 	run.LoadAnimations("run");
 	jump.LoadAnimations("jump");
@@ -27,13 +29,14 @@ j1Player::~j1Player() {}
 bool j1Player::Start() {
 
 	LOG("Loading player textures");
-	sprites = App->tex->Load("textures/Alienblue.png");
+	sprites = App->tex->Load("textures/AlienBlue.png");
 
 	LoadPlayerProperties();
 
     collider = App->collision->AddCollider({ (int)position.x + margin.x, (int)position.y + margin.y, playerSize.x, playerSize.y }, COLLIDER_PLAYER, App->entity);
 
 	player_start = true;
+
 	return true;
 }
 
@@ -42,7 +45,7 @@ bool j1Player::PreUpdate() {
 		return true;
 }
 
-bool j1Player::Update(float dt, bool do_logic) {
+bool j1Player::Update(float dt) {
 
 	if (player_start)
 	{
@@ -258,7 +261,7 @@ bool j1Player::Update(float dt, bool do_logic) {
 			extra_life = false;
 */
 		// Blitting the player
-		SDL_Rect r = { 0,281,168,236 };
+		SDL_Rect r = {0,8,62,85};
 
 		if (!attacking) {
 			if (facingRight)
@@ -272,8 +275,6 @@ bool j1Player::Update(float dt, bool do_logic) {
 			else
 				Draw(r, false, attackBlittingX, attackBlittingY);
 		}
-
-
 
 		// We update the camera to followe the player every frame
 		UpdateCameraPosition();
@@ -362,6 +363,8 @@ bool j1Player::CleanUp() {
 
 void j1Player::UpdateCameraPosition()
 {
+
+	position.x = App->render->camera.x;
 	if (App->render->camera.x > cameraLimit)
 		App->render->camera.x = -position.x * 4 + 400;
 
@@ -370,12 +373,12 @@ void j1Player::UpdateCameraPosition()
 		App->render->camera.x = 0;
 
 	//Limit player X position
-	if (App->entity->player->position.x > playerLimit)
-		App->entity->player->position.x = playerLimit;
+	if (position.x > playerLimit)
+		position.x = playerLimit;
 
 	// To force the player to go forward at the start of the level
-	if (App->entity->player->position.x < 0)
-		App->entity->player->position.x = 0;
+	if (position.x < 0)
+		position.x = 0;
 
 }
 // Detects collisions

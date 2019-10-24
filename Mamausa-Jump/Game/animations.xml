@@ -2,7 +2,7 @@
   <player>
 	  
     <idle loop="true" speed="1.0f">
-      <animation x="0" y="281" w="168" h="236"/>
+      <animation x="0" y="8" w="62" h="85"/>
     </idle>
 
     <run loop="true" speed="5.0f">
