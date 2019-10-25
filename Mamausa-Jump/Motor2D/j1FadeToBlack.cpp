@@ -10,7 +10,7 @@
 #include "SDL/include/SDL_timer.h"
 
 
-j1FadeToBlack::j1FadeToBlack()
+j1FadeToBlack::j1FadeToBlack():j1Module()
 {
 	pugi::xml_document file;
 	pugi::xml_parse_result result = file.load_file("config.xml");

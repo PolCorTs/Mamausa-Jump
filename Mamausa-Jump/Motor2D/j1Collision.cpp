@@ -3,11 +3,12 @@
 #include "j1Render.h"
 #include "j1Player.h"
 #include "j1Collision.h"
+#include "j1Map.h"
 #include "p2Log.h"
 #include "j1Globals.h"
 
 
-j1Collision::j1Collision()
+j1Collision::j1Collision()	: j1Module()
 {
 	for (uint i = 0; i < MAX_COLLIDERS; ++i)
 		colliders[i] = nullptr;
@@ -47,7 +48,7 @@ bool j1Collision::PreUpdate()
 		if (colliders[i] == nullptr)
 			continue;
 
-		if(colliders[i]->type = COLLIDER_PLAYER)
+		if(colliders[i]->type == COLLIDER_PLAYER)
 		{ 
 			c1 = colliders[i];
 
@@ -74,16 +75,15 @@ bool j1Collision::PreUpdate()
 		}
 	}
 
-	return UPDATE_CONTINUE;
+	return true;
 }
 
 // Called before render is available
-bool j1Collision::Update()
+bool j1Collision::Update(float dt)
 {
-
 	DrawColliders();
 
-	return UPDATE_CONTINUE;
+	return true;
 }
 
 
@@ -152,12 +152,6 @@ void j1Collision::DrawColliders()
 		case COLLIDER_PLAYER:	//Dark green
 			App->render->DrawQuad(colliders[i]->rect, 0, 71, 49, alpha);
 			break;
-		//case COLLIDER_ENEMY:	//Orange
-		//	App->render->DrawQuad(colliders[i]->rect, 253, 106, 2, alpha);
-		//	break;
-		//case COLLIDER_COIN:		//Yellow
-		//	App->render->DrawQuad(colliders[i]->rect, 255, 255, 0, alpha);
-		//	break;
 		}
 	}
 }

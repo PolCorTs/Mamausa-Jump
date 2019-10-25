@@ -10,14 +10,6 @@
 #define MIN( a, b ) ( ((a) < (b)) ? (a) : (b) )
 #define MAX( a, b ) ( ((a) > (b)) ? (a) : (b) )
 
-enum update_status
-{
-	UPDATE_CONTINUE = 1,
-	UPDATE_STOP,
-	UPDATE_ERROR
-};
-
-
  //Useful typedefs ---------
 typedef unsigned int uint;
 

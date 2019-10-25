@@ -58,19 +58,21 @@ public:
 	bool facingRight = true;
 
 	fPoint initialPosition;
+	fPoint player_position;
 
 	iPoint playerSize;
 	iPoint margin;
 	iPoint speed;
-
-	uint currentJumps;
-	uint initialJumps;
+	
 	uint maxJumps;
 	uint colisionMargin;
 	uint deathByFallColliderHeight;
 	uint points = 0;
 	uint score_points = 0;
 	uint lives;
+	uint currentJumps;
+	uint initialJumps;
+	uint doubleJump = 2;
 
 	Collider* attackCollider = nullptr;
 
@@ -91,11 +93,17 @@ public:
 	bool wallBehind = false;
 	bool wallAbove = false;
 
+	bool ColRight = false;
+	bool ColLeft = false;
+	bool ColUp = false;
+	bool ColDown = false;
+
 	bool GodMode = false;
 	bool playerIdle = false;
 	bool jumping = false;
 	bool freefall = false;
 
+	bool playerCanMove = false;
 	bool player_start = false;
 	bool loading = false;
 	bool dead = false;

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.1.5" orientation="orthogonal" renderorder="right-down" width="120" height="20" tilewidth="70" tileheight="70" infinite="0" nextobjectid="60">
+<map version="1.2" tiledversion="1.2.4" orientation="orthogonal" renderorder="right-down" width="120" height="20" tilewidth="70" tileheight="70" infinite="0" nextlayerid="8" nextobjectid="60">
  <tileset firstgid="1" name="tiles_spritesheet" tilewidth="70" tileheight="70" spacing="2" tilecount="522" columns="18">
   <image source="tiles_spritesheet.png" width="1294" height="2086"/>
  </tileset>
  <tileset firstgid="523" name="bg_grasslands" tilewidth="70" tileheight="70" tilecount="3420" columns="171">
   <image source="bg_grasslands.png" width="12000" height="1400"/>
  </tileset>
- <layer name="Background" width="120" height="20">
+ <layer id="1" name="Background" width="120" height="20">
   <data>
    <tile gid="523"/>
    <tile gid="524"/>
@@ -2410,7 +2410,7 @@
    <tile/>
   </data>
  </layer>
- <layer name="Map" width="120" height="20">
+ <layer id="2" name="Map" width="120" height="20">
   <data>
    <tile/>
    <tile/>
@@ -4344,7 +4344,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="308"/>
+   <tile gid="405"/>
    <tile/>
    <tile/>
    <tile/>
@@ -4440,7 +4440,7 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile gid="308"/>
+   <tile gid="405"/>
    <tile/>
    <tile/>
    <tile/>
@@ -4814,7 +4814,7 @@
    <tile gid="225"/>
   </data>
  </layer>
- <objectgroup name="ground_collider">
+ <objectgroup id="7" name="wall_collider">
   <object id="36" x="7769" y="1259.75" width="631" height="140.25"/>
   <object id="37" x="7489.67" y="1190.08" width="279.833" height="210.875"/>
   <object id="39" x="7000.08" y="1189.56" width="279.833" height="209.542"/>
@@ -4838,19 +4838,17 @@
   <object id="57" x="2869.94" y="629.849" width="349.455" height="40.303"/>
   <object id="58" x="2309.94" y="841.182" width="489.455" height="40.303"/>
   <object id="59" x="6439.97" y="910.152" width="489.455" height="40.303"/>
- </objectgroup>
- <objectgroup name="wall_collider">
   <object id="26" x="-76.7879" y="-32.9697" width="75.7576" height="1431.97"/>
   <object id="27" x="-10.6667" y="-32.303" width="8418.06" height="33.3333"/>
   <object id="28" x="8399.64" y="-29.8182" width="39.3939" height="1430.06"/>
  </objectgroup>
- <objectgroup name="death_collider">
+ <objectgroup id="5" name="death_collider">
   <object id="29" x="7273.15" y="1356.85" width="222.727" height="42.4242"/>
   <object id="32" x="1396.64" y="1357.45" width="294.06" height="42.4242"/>
   <object id="33" x="5308.64" y="1356.79" width="508.727" height="42.4242"/>
   <object id="34" x="3340.64" y="1354.79" width="316.727" height="42.4242"/>
  </objectgroup>
- <objectgroup name="end_collider">
+ <objectgroup id="6" name="end_collider">
   <object id="35" x="8271" y="1226" width="47" height="33"/>
  </objectgroup>
 </map>

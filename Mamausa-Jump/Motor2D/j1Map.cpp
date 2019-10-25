@@ -4,6 +4,7 @@
 #include "j1Render.h"
 #include "j1Textures.h"
 #include "j1Map.h"
+#include "j1Collision.h"
 #include <math.h>
 
 j1Map::j1Map() : j1Module(), map_loaded(false)
@@ -276,6 +277,8 @@ bool j1Map::Load(const char* file_name)
 		}
 	}
 
+	LoadColliders();
+
 	map_loaded = ret;
 
 	return ret;
@@ -462,6 +465,35 @@ bool j1Map::LoadProperties(pugi::xml_node& node, Properties& properties)
 	}
 
 	return ret;
+}
+
+bool j1Map::LoadColliders()
+{
+	bool ret = true;
+
+	pugi::xml_node objectgroup;
+	pugi::xml_node object;
+	const char* name;
+
+	for (objectgroup = map_file.child("map").child("objectgroup"); objectgroup && ret; objectgroup = objectgroup.next_sibling("objectgroup"))
+	{
+		name = objectgroup.attribute("name").as_string();
+
+		for (object = objectgroup.child("object"); object && ret; object = object.next_sibling("object"))
+		{
+			if (strcmp(name, "wall_collider") == 0)
+				App->collision->AddCollider({ object.attribute("x").as_int(), object.attribute("y").as_int(), object.attribute("width").as_int(), object.attribute("height").as_int() }, COLLIDER_WALL);
+
+			/*if (strcmp(name, "death_collider") == 0)
+				App->collisions->AddCollider({ object.attribute("x").as_int(), object.attribute("y").as_int(), object.attribute("width").as_int(), object.attribute("height").as_int() }, COLLIDER_DEATH);
+
+			if (strcmp(name, "win_collider") == 0)
+				App->collisions->AddCollider({ object.attribute("x").as_int(), object.attribute("y").as_int(), object.attribute("width").as_int(), object.attribute("height").as_int() }, COLLIDER_WIN);*/
+
+		}
+	}
+
+	return true;
 }
 
 bool j1Map::CreateWalkabilityMap(int& width, int& height, uchar** buffer) const

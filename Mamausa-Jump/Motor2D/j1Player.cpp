@@ -15,7 +15,7 @@ j1Player::j1Player(int x, int y, ENTITY_TYPES type) : j1Entity(x, y, ENTITY_TYPE
 {
 	animation = NULL;
 
-	position = { (float)x, (float)y };
+	player_position = { (float)x, (float)y };
 
 	idle.LoadAnimations("idle");
 	run.LoadAnimations("run");
@@ -34,7 +34,7 @@ bool j1Player::Start() {
 
 	LoadPlayerProperties();
 
-    collider = App->collision->AddCollider({ (int)position.x + margin.x, (int)position.y + margin.y, playerSize.x, playerSize.y }, COLLIDER_PLAYER, App->entity);
+    collider = App->collision->AddCollider({ (int)player_position.x + margin.x, (int)player_position.y + margin.y, playerSize.x, playerSize.y }, COLLIDER_PLAYER, App->entity);
 
 	player_start = true;
 
@@ -59,21 +59,21 @@ bool j1Player::Update(float dt) {
 
 			if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT)
 			{
-				position.x += godModeSpeed * dt;
+				player_position.x += godModeSpeed * dt;
 				facingRight = true;
 			}
 
 			if (App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_REPEAT)
 			{
-				position.x -= godModeSpeed * dt;
+				player_position.x -= godModeSpeed * dt;
 				facingRight = false;
 			}
 
 			if (App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_REPEAT)
-				position.y -= godModeSpeed * dt;
+				player_position.y -= godModeSpeed * dt;
 
 			if (App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_REPEAT)
-				position.y += godModeSpeed * dt;
+				player_position.y += godModeSpeed * dt;
 		}
 		else {
 
@@ -84,7 +84,7 @@ bool j1Player::Update(float dt) {
 			// Direction controls	
 			if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT && attacking == false) {
 				if (wallInFront == false && dead == false) {
-					position.x += speed.x;
+					player_position.x += speed.x;
 					animation = &run;
 				}
 				else if (dead == true) {
@@ -98,7 +98,7 @@ bool j1Player::Update(float dt) {
 
 			if (App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_REPEAT && attacking == false) {
 				if (wallBehind == false && dead == false) {
-					position.x -= speed.x;
+					player_position.x -= speed.x;
 					animation = &run;
 				}
 				else if (dead == true) {
@@ -111,7 +111,7 @@ bool j1Player::Update(float dt) {
 
 			if (App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_REPEAT && attacking == false) {
 				if (wallInFront == false && dead == false) {
-					position.y -= speed.y;
+					player_position.y -= speed.y;
 					animation = &run;
 				}
 				else if (dead == true) {
@@ -124,8 +124,8 @@ bool j1Player::Update(float dt) {
 			}
 
 			if (App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_REPEAT && attacking == false) {
-				if (wallBehind == false && dead == false) {
-					position.y += speed.y;
+				if (OnGround == false && dead == false) {
+					player_position.y += speed.y;
 					animation = &run;
 				}
 				else if (dead == true) {
@@ -209,8 +209,8 @@ bool j1Player::Update(float dt) {
 			// Restarting the level in case the player dies
 			if (App->fade->IsFading() == 0)
 			{
-				position.x = initialPosition.x;
-				position.y = initialPosition.y;
+				player_position.x = initialPosition.x;
+				player_position.y = initialPosition.y;
 				fallingSpeed = initialFallingSpeed;
 				jumping = false;
 				facingRight = true;
@@ -228,17 +228,16 @@ bool j1Player::Update(float dt) {
 		// Update collider position to player position
 
 		if (collider != nullptr)
-			collider->SetPos(position.x + margin.x, position.y + margin.y);
+			collider->SetPos(player_position.x + margin.x, player_position.y + margin.y);
 
 		// Blitting the player
 		SDL_Rect r = {0,8,62,85};
 
-		
 		if (facingRight) {
-			Draw(r, false, 0, 0);
+			Draw(r, false, player_position.x, player_position.y);
 		}
 		else {
-			Draw(r, true, 0, 0);
+			Draw(r, true, player_position.x, player_position.y);
 		}
 
 		return true;
@@ -264,8 +263,8 @@ bool j1Player::PostUpdate() {
 // Load game state
 bool j1Player::Load(pugi::xml_node& data) {
 
-	position.x = data.child("player").child("position").attribute("x").as_int();
-	position.y = data.child("player").child("position").attribute("y").as_int();
+	player_position.x = data.child("player").child("position").attribute("x").as_int();
+	player_position.y = data.child("player").child("position").attribute("y").as_int();
 
 	GodMode = data.child("player").child("godmode").attribute("value").as_bool();
 
@@ -292,8 +291,8 @@ bool j1Player::Save(pugi::xml_node& data) const {
 
 	pugi::xml_node pos = data.append_child("position");
 
-	pos.append_attribute("x") = position.x;
-	pos.append_attribute("y") = position.y;
+	pos.append_attribute("x") = player_position.x;
+	pos.append_attribute("y") = player_position.y;
 
 	pugi::xml_node godmode = data.append_child("godmode");
 
@@ -320,118 +319,85 @@ bool j1Player::CleanUp() {
 	return true;
 }
 
-// Detects collisions
-void j1Player::OnCollision(Collider* col_1, Collider* col_2)
+// Detects Collisions
+
+void j1Player::OnCollision(Collider* c1, Collider* c2)
 {
-	if (col_1->type == COLLIDER_PLAYER || col_1->type == COLLIDER_NONE)
+	if (c1->type == COLLIDER_PLAYER)
 	{
-		//If the player collides with win colliders
-		if (col_2->type == COLLIDER_WIN)
+		if (c2->type == COLLIDER_WALL)
 		{
-			OnGround = true;
-			App->fade->FadeToBlack();
-
-		
-		}
-		else
-		{
-			// If the player collides with a wall
-			if (col_2->type == COLLIDER_WALL) {
-				if (collider->rect.x + collider->rect.w >= col_2->rect.x + colisionMargin
-					&& collider->rect.x + colisionMargin < col_2->rect.x + col_2->rect.w) {
-					//If the collision is with the "ceiling"
-					if (collider->rect.y <= col_2->rect.y + col_2->rect.h
-						&& collider->rect.y + (collider->rect.h / 2) > col_2->rect.y + col_2->rect.h
-						&& verticalSpeed < 0) {
-
-						position.y = col_2->rect.y + col_2->rect.h;
-
-						wallAbove = true;
-						jumping = false;
-						fallingSpeed = initialFallingSpeed;
-						currentJumps++;
-					}
-					else
-						//If the collision is with the ground
-						if (loading == false) {
-							if (collider->rect.y + collider->rect.h >= col_2->rect.y
-								&& collider->rect.y < col_2->rect.y) {
-
-								position.y = col_2->rect.y - collider->rect.h;
-
-								OnGround = true;
-								jumping = false;
-								freefall = false;
-								verticalSpeed = initialVerticalSpeed;
-								fallingSpeed = initialFallingSpeed;
-								currentJumps = initialJumps;
-							}
-						}
-				}
-				if (collider->rect.y + collider->rect.h >= col_2->rect.y + colisionMargin
-					&& collider->rect.y <= col_2->rect.y + col_2->rect.h) {
-					//If the collision is with a wall in front
-					if (collider->rect.x + collider->rect.w >= col_2->rect.x
-						&& collider->rect.x <= col_2->rect.x && !wallAbove) {
-
-						wallInFront = true;
-
-						if (position.x + (collider->rect.w * 3 / 4) < col_2->rect.x)
-							position.x = col_2->rect.x - collider->rect.w - 1;
-					}
-					else
-						//If the collision is with a wall behind
-						if (collider->rect.x <= col_2->rect.x + col_2->rect.w
-							&& collider->rect.x + collider->rect.w >= col_2->rect.x + col_2->rect.w && !wallAbove) {
-
-							wallBehind = true;
-							
-
-							if (position.x + (collider->rect.w / 4) < col_2->rect.x + col_2->rect.w)
-								position.x = col_2->rect.x + col_2->rect.w - colisionMargin;
-						}
-				}
-			}
-
-			//If the player collides with death colliders
-			if (col_2->type == COLLIDER_DEATH )
+			// Right & Left Collisions
+			if (c1->rect.y <= c2->rect.y + c2->rect.h && c1->rect.y + c1->rect.h - 5 >= c2->rect.y)
 			{
-				/*if (App->scene->active)
-					App->scene->settings_window->position = App->gui->settingsPosition;*/
-				
-
-				App->fade->FadeToBlack(3.0f);
-
-				if (lives > 0)
+				// right
+				if (c1->rect.x + c1->rect.w >= c2->rect.x && c1->rect.x <= c2->rect.x)
 				{
-					if (col_2->rect.h < deathByFallColliderHeight)
-						deathByFall = true;
-					else {
-						if (!playedSound) {
-							App->audio->PlayFx(playerHurt);
-							playedSound = true;
-						}
-
-						jumping = false;
-						fallingSpeed = initialFallingSpeed;
-					}
-					//App->entity->DestroyEntities();
-
-					dead = true;
-					App->audio->PlayFx(deathSound);
-					currentJumps == maxJumps;
-					points = 0;
-					score_points = 0;
+					ColRight = true;
+					ColLeft = false;
 				}
-				/*else if(App->scene->active)
-					App->scene->backToMenu = true;*/
-				
-				
+				// left
+				else if (c1->rect.x <= c2->rect.x + c2->rect.w && c1->rect.x + c1->rect.w >= c2->rect.x + c2->rect.w)
+				{
+					ColLeft = true;
+					ColRight = false;
+				}
+			}
+
+			// Up & Down Collisions
+			if (c1->rect.x + c1->rect.w >= c2->rect.x + 4 && c1->rect.x + 4 <= c2->rect.x + c2->rect.w)
+			{
+				// down
+				if (c1->rect.y + c1->rect.h >= c2->rect.y && c1->rect.y < c2->rect.y) {
+
+					OnGround = true;
+					jumping = false;
+
+					player_position.y = c2->rect.y - c1->rect.h + 1;
+
+					speed.y = 0;
+					doubleJump = 2;
+
+					ColDown = true;
+					ColUp = false;
+					playerCanMove = true;
+				}
+				// up
+				else if (c1->rect.y <= c2->rect.y + c2->rect.h && c1->rect.y > c2->rect.y) {
+
+					OnGround = false;
+
+					player_position.y = c2->rect.y + c2->rect.h;
+
+					ColDown = false;
+					ColUp = true;
+
+					LOG("TOUCHING UP");
+				}
 			}
 		}
 
+		//Death
+
+		/*if (c2->type == COLLIDER_DEATH) {
+			if (!playedFx) {
+				App->audio->PlayFx(App->audio->deathFx);
+				playedFx = true;
+			}
+
+			animation = &deathAnim;
+			isDead = true;
+		}*/
+
+		//Win
+
+		/*if (c2->type == COLLIDER_WIN) {
+			touchingWin = true;
+			playerCanMove = false;
+			c2->to_delete = true;
+		}*/
 	}
-};
+}
 
 void j1Player::LoadPlayerProperties() {
 
@@ -449,26 +415,15 @@ void j1Player::LoadPlayerProperties() {
 	playerSize.y = player.child("size").attribute("height").as_int();
 	margin.x = player.child("margin").attribute("x").as_int();
 	margin.y = player.child("margin").attribute("y").as_int();
-	colisionMargin = player.child("margin").attribute("colisionMargin").as_uint();
 
 	// Copying values of the speed
 	pugi::xml_node speed = player.child("speed");
 
 	//Speed
 
-	initialVerticalSpeed = speed.child("movement").attribute("initialVertical").as_float();
-	godModeSpeed = speed.child("movement").attribute("godmode").as_float();
-	initialFallingSpeed = speed.child("physics").attribute("initialFalling").as_float();
-	fallingSpeed = speed.child("physics").attribute("falling").as_float();
-	verticalAcceleration = speed.child("physics").attribute("acceleration").as_float();
-
 	//Jump
 
-	initialJumps = speed.child("physics").attribute("jumpNumber").as_uint();
-	maxJumps = speed.child("physics").attribute("maxJumps").as_uint();
-
 	cameraLimit = config.child("scene1").child("camera").attribute("cameraLimit").as_int();
-	playerLimit = config.child("scene1").child("camera").attribute("playerLimit").as_int();
 
 	deathByFallColliderHeight = player.child("deathByFallCollider").attribute("h").as_uint();
 }
