@@ -75,14 +75,22 @@ bool j1Scene::Update(float dt)
 	if (App->entity->player != nullptr)
 		App->render->camera.x = -App->entity->player->position.x;
 
+	//Limit X Start
+
 	if (App->render->camera.x > 0)
 		App->render->camera.x = 0;
+
+	//Limit X End
 
 	if (App->render->camera.x < -7100)
 		App->render->camera.x = -7100;
 
+	//Limit Y Start
+
 	if (App->render->camera.y > 0)
 		App->render->camera.y = 0;
+
+	//Limit Y End
 
 	if (App->render->camera.y < -400)
 		App->render->camera.y = -400;

@@ -37,7 +37,6 @@ public:
 	bool Save(pugi::xml_node&) const;
 
 	void LoadPlayerProperties();
-	void UpdateCameraPosition();
 
 public:
 
@@ -47,8 +46,6 @@ public:
 	Animation jump;
 	Animation fall;
 	Animation godmode;
-	Animation attackRight;
-	Animation attackLeft;
 	Animation death;
 
 	// Sounds
@@ -64,6 +61,7 @@ public:
 
 	iPoint playerSize;
 	iPoint margin;
+	iPoint speed;
 
 	uint currentJumps;
 	uint initialJumps;
@@ -75,12 +73,6 @@ public:
 	uint lives;
 
 	Collider* attackCollider = nullptr;
-
-	// Attack values
-	int attackBlittingX;
-	int attackBlittingY;
-	int rightAttackSpawnPos;
-	int leftAttackSpawnPos;
 
 	float godModeSpeed;
 	float horizontalSpeed;
@@ -94,7 +86,7 @@ public:
 	float verticalAcceleration;
 
 	// It tells you wether the player has landed, has a wall in front, a wall behind or a wall above
-	bool feetOnGround = false;
+	bool OnGround = false;
 	bool wallInFront = false;
 	bool wallBehind = false;
 	bool wallAbove = false;
