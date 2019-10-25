@@ -33,7 +33,7 @@ bool j1Scene::Awake()
 // Called before the first frame
 bool j1Scene::Start()
 {
-	App->map->Load("Map1.tmx");
+	App->map->Load("map1.tmx");
 
 	App->entity->CreateEntity(PLAYER, 2, 17);
 
