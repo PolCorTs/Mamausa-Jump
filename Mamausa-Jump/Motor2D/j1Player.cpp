@@ -228,7 +228,7 @@ bool j1Player::Update(float dt) {
 		// Update collider position to player position
 
 		if (collider != nullptr)
-			collider->SetPos(player_position.x, player_position.y);
+			collider->SetPos(player_position.x + margin.x, player_position.y + margin.y);
 
 		// Blitting the player
 		SDL_Rect r = animation->GetCurrentFrame(dt);
@@ -361,6 +361,8 @@ void j1Player::OnCollision(Collider* c1, Collider* c2)
 					ColDown = true;
 					ColUp = false;
 					playerCanMove = true;
+
+					LOG("TOUCHING DOWN");
 				}
 				// up
 				else if (c1->rect.y <= c2->rect.y + c2->rect.h && c1->rect.y > c2->rect.y) {

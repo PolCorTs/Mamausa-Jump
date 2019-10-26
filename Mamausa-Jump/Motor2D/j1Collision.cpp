@@ -39,37 +39,31 @@ bool j1Collision::PreUpdate()
 	}
 
 	// Calculate collisions
-	Collider* c1;
-	Collider* c2;
+	Collider* col1;
+	Collider* col2;
 
 	for (uint i = 0; i < MAX_COLLIDERS; ++i)
 	{
-		// skip empty colliders
 		if (colliders[i] == nullptr)
 			continue;
 
 		if (colliders[i]->type == COLLIDER_PLAYER)
 		{
-			c1 = colliders[i];
+			col1 = colliders[i];
 
-			// avoid checking collisions already checked
-			for (int j = i + 1; j < MAX_COLLIDERS; ++j)
+			for (uint j = 0; j < MAX_COLLIDERS; ++j)
 			{
-				// skip empty colliders
-				if (colliders[j] == nullptr)
-					continue;
+				if (colliders[j] == nullptr || i == j) continue;
 
-				c2 = colliders[j];
-				if (c2 != nullptr) {
+				col2 = colliders[j];
 
-					if (c1->CheckCollision(c2->rect) == true)
-					{
-						if (matrix[c1->type][c2->type] && c1->callback)
-							c1->callback->OnCollision(c1, c2);
+				if (col1->CheckCollision(col2->rect) == true)
+				{
+					if (matrix[col1->type][col2->type] && col1->callback)
+						col1->callback->OnCollision(col1, col2);
 
-						if (matrix[c2->type][c1->type] && c2->callback)
-							c2->callback->OnCollision(c2, c1);
-					}
+					if (matrix[col2->type][col1->type] && col2->callback)
+						col2->callback->OnCollision(col2, col1);
 				}
 			}
 		}
