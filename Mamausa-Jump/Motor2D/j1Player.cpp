@@ -231,7 +231,7 @@ bool j1Player::Update(float dt) {
 			collider->SetPos(player_position.x, player_position.y);
 
 		// Blitting the player
-		SDL_Rect r = { 0,8,62,85 };
+		SDL_Rect r = animation->GetCurrentFrame(dt);
 
 		if (facingRight) {
 			Draw(r, false, player_position.x, player_position.y);
