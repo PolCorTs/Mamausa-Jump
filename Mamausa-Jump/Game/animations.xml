@@ -1,21 +1,21 @@
 <animations>
   <player>
-	  
+	
     <idle loop="true" speed="1.0f">
-      <animation x="0" y="8" w="62" h="85"/>
+      <animation x="143" y="0" w="67" h="92"/>
     </idle>
 
     <run loop="true" speed="5.0f">
-      <animation  x="193" y="280" w="162" h="236"/>
-      <animation  x="368" y="281" w="163" h="237"/>
+      <animation  x="0" y="0" w="66" h="93"/>
+      <animation  x="70" y="0" w="66" h="95"/>
     </run>
 
     <jump loop="true" speed="f">
-      <animation x="" y="" w="" h=""/>
+      <animation x="420" y="0" w="66" h="93"/>
     </jump>
 
     <fall loop="true" speed="f">
-      <animation x="" y="" w="" h=""/>
+      <animation x="622" y="0" w="69" h="95"/>
     </fall>
 
 	<godmode loop="true" speed="f">	

@@ -19,8 +19,8 @@
   </window>
 
 <player>
-	<size width="62" height="85"/>
-	<margin x="0" y="8" colisionMargin="2"/>
+	<size width="69" height="95"/>
+	<margin x="2" y="417"/>
 	<deathByFallCollider h="10"/>
 	<speed>
 	  <movement initialVertical="-150.0f" vertical="-150.0f" horizontal="80.0f" godmode="120.0f"/>
