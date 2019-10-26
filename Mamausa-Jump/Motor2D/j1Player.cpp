@@ -34,7 +34,7 @@ bool j1Player::Start() {
 
 	LoadPlayerProperties();
 
-	collider = App->collision->AddCollider({ (int)player_position.x + margin.x, (int)player_position.y + margin.y, playerSize.x, playerSize.y }, COLLIDER_PLAYER, App->entity);
+	collider = App->collision->AddCollider({ (int)player_position.x, (int)player_position.y, playerSize.x, playerSize.y }, COLLIDER_PLAYER, App->entity);
 
 	player_start = true;
 
@@ -55,34 +55,34 @@ bool j1Player::Update(float dt) {
 
 		if (GodMode) {
 
-			animation = &idle;
+			animation = &godmode;
 
 			if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT)
 			{
-				player_position.x += godModeSpeed * dt;
+				player_position.x += godModeSpeed;
 				facingRight = true;
 			}
 
 			if (App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_REPEAT)
 			{
-				player_position.x -= godModeSpeed * dt;
+				player_position.x -= godModeSpeed;
 				facingRight = false;
 			}
 
 			if (App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_REPEAT)
-				player_position.y -= godModeSpeed * dt;
+				player_position.y -= godModeSpeed;
 
 			if (App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_REPEAT)
-				player_position.y += godModeSpeed * dt;
+				player_position.y += godModeSpeed;
 		}
 		else {
 
-			if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_IDLE && App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_IDLE && attacking == false) {
+			if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_IDLE && App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_IDLE) {
 				animation = &idle;
 			}
 
 			// Direction controls	
-			if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT && attacking == false) {
+			if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT) {
 				if (wallInFront == false && dead == false) {
 					player_position.x += speed.x;
 					animation = &run;
@@ -96,7 +96,7 @@ bool j1Player::Update(float dt) {
 				}
 			}
 
-			if (App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_REPEAT && attacking == false) {
+			if (App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_REPEAT) {
 				if (wallBehind == false && dead == false) {
 					player_position.x -= speed.x;
 					animation = &run;
@@ -109,7 +109,7 @@ bool j1Player::Update(float dt) {
 					animation = &idle;
 			}
 
-			if (App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_REPEAT && attacking == false) {
+			if (App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_REPEAT) {
 				if (wallInFront == false && dead == false) {
 					player_position.y -= speed.y;
 					animation = &run;
@@ -123,7 +123,7 @@ bool j1Player::Update(float dt) {
 				}
 			}
 
-			if (App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_REPEAT && attacking == false) {
+			if (App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_REPEAT) {
 				if (OnGround == false && dead == false) {
 					player_position.y += speed.y;
 					animation = &run;
@@ -228,7 +228,7 @@ bool j1Player::Update(float dt) {
 		// Update collider position to player position
 
 		if (collider != nullptr)
-			collider->SetPos(player_position.x + margin.x, player_position.y + margin.y);
+			collider->SetPos(player_position.x, player_position.y);
 
 		// Blitting the player
 		SDL_Rect r = { 0,8,62,85 };

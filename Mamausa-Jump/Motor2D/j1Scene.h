@@ -32,6 +32,12 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
+
+public:
+
+	bool Pmove = true;
+	bool Cmove = true;
+
 private:
 };
 

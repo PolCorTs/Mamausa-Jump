@@ -5,7 +5,6 @@
 j1Entity::j1Entity(int x, int y, ENTITY_TYPES type) : position(x, y), type(type)
 {
 }
-
 void j1Entity::Draw(SDL_Rect r, bool flip, int x, int y)
 {
 	if (flip == false)
