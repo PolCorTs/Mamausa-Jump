@@ -34,18 +34,18 @@ bool j1Player::Start() {
 
 	LoadPlayerProperties();
 
-    collider = App->collision->AddCollider({ (int)player_position.x + margin.x, (int)player_position.y + margin.y, playerSize.x, playerSize.y }, COLLIDER_PLAYER, App->entity);
+	collider = App->collision->AddCollider({ (int)player_position.x + margin.x, (int)player_position.y + margin.y, playerSize.x, playerSize.y }, COLLIDER_PLAYER, App->entity);
 
 	player_start = true;
 
-	speed = {1, 1};
+	speed = { 1, 1 };
 
 	return true;
 }
 
 bool j1Player::PreUpdate() {
 
-		return true;
+	return true;
 }
 
 bool j1Player::Update(float dt) {
@@ -139,7 +139,7 @@ bool j1Player::Update(float dt) {
 			if (OnGround == false && jumping == false) {
 
 				freefall = true;
-				
+
 				if (!attacking)
 					animation = &fall;
 			}
@@ -231,7 +231,7 @@ bool j1Player::Update(float dt) {
 			collider->SetPos(player_position.x + margin.x, player_position.y + margin.y);
 
 		// Blitting the player
-		SDL_Rect r = {0,8,62,85};
+		SDL_Rect r = { 0,8,62,85 };
 
 		if (facingRight) {
 			Draw(r, false, player_position.x, player_position.y);
@@ -403,10 +403,10 @@ void j1Player::LoadPlayerProperties() {
 
 	pugi::xml_document config_file;
 	config_file.load_file("config.xml");
-	
+
 	pugi::xml_node config;
 	config = config_file.child("config");
-	
+
 	pugi::xml_node player;
 	player = config.child("player");
 

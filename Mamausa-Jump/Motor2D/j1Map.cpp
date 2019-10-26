@@ -41,7 +41,7 @@ void j1Map::Draw()
 		//if(layer->properties.Get("Nodraw") != 0)
 		//continue;
 
-		
+
 		for (int y = 0; y < data.height; ++y)
 		{
 			for (int x = 0; x < data.width; ++x)
@@ -54,13 +54,13 @@ void j1Map::Draw()
 
 					SDL_Rect r = tileset->GetTileRect(tile_id);
 					iPoint pos = MapToWorld(x, y);
-					
-					
+
+
 					if (item->data->name == "Map")
 						App->render->Blit(tileset->texture, pos.x, pos.y, &r);
 					else if (item->data->name == "Background")
 						App->render->Blit(tileset->texture, pos.x, pos.y, &r, 0.05f);
-					
+
 
 				}
 			}

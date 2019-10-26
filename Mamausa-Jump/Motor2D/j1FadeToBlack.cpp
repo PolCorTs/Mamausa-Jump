@@ -10,7 +10,7 @@
 #include "SDL/include/SDL_timer.h"
 
 
-j1FadeToBlack::j1FadeToBlack():j1Module()
+j1FadeToBlack::j1FadeToBlack() :j1Module()
 {
 	pugi::xml_document file;
 	pugi::xml_parse_result result = file.load_file("config.xml");
@@ -37,8 +37,8 @@ bool j1FadeToBlack::Start()
 // Update: draw background
 bool j1FadeToBlack::Update(float dt)
 {
-		if (current_step == fade_step::none)
-			return true;
+	if (current_step == fade_step::none)
+		return true;
 
 	Uint32 now = SDL_GetTicks() - start_time;
 	float normalized = MIN(1.0f, (float)now / (float)total_time);

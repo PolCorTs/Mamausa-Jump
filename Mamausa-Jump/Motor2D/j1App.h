@@ -107,6 +107,6 @@ private:
 	mutable p2SString	save_game;
 };
 
-extern j1App* App; 
+extern j1App* App;
 
 #endif

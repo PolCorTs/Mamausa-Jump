@@ -63,7 +63,7 @@ public:
 	iPoint playerSize;
 	iPoint margin;
 	iPoint speed;
-	
+
 	uint maxJumps;
 	uint colisionMargin;
 	uint deathByFallColliderHeight;

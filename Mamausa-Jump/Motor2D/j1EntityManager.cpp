@@ -26,21 +26,21 @@ bool j1EntityManager::Start()
 
 bool j1EntityManager::PreUpdate()
 {
-		for (uint i = 0; i < MAX_ENTITIES; ++i)
+	for (uint i = 0; i < MAX_ENTITIES; ++i)
+	{
+		if (queue[i].type != ENTITY_TYPES::UNKNOWN)
 		{
-			if (queue[i].type != ENTITY_TYPES::UNKNOWN)
-			{
-				//SpawnEnemy(queue[i]);
-				queue[i].type = ENTITY_TYPES::UNKNOWN;
-			}
+			//SpawnEnemy(queue[i]);
+			queue[i].type = ENTITY_TYPES::UNKNOWN;
 		}
+	}
 
 	return true;
 }
 
 bool j1EntityManager::Update(float dt)
 {
-	
+
 	for (p2List_item<j1Entity*>* iterator = entities.start; iterator != nullptr; iterator = iterator->next)
 	{
 		iterator->data->Update(dt);
@@ -52,10 +52,10 @@ bool j1EntityManager::Update(float dt)
 bool j1EntityManager::PostUpdate()
 {
 
-		for (p2List_item<j1Entity*>* iterator = entities.start; iterator != nullptr; iterator = iterator->next)
-		{
-			iterator->data->PostUpdate();
-		}
+	for (p2List_item<j1Entity*>* iterator = entities.start; iterator != nullptr; iterator = iterator->next)
+	{
+		iterator->data->PostUpdate();
+	}
 
 	return true;
 }
@@ -95,10 +95,10 @@ void j1EntityManager::AddEnemy(int x, int y, ENTITY_TYPES type)
 	{
 		if (queue[i].type == ENTITY_TYPES::UNKNOWN)
 		{
-				queue[i].type = type;
-				queue[i].position.x = x;
-				queue[i].position.y = y;
-				break;
+			queue[i].type = type;
+			queue[i].position.x = x;
+			queue[i].position.y = y;
+			break;
 		}
 	}
 }
@@ -118,7 +118,7 @@ void j1EntityManager::OnCollision(Collider* c1, Collider* c2)
 
 void j1EntityManager::CreatePlayer()
 {
-	player = (j1Player*)CreateEntity(PLAYER,0,0);
+	player = (j1Player*)CreateEntity(PLAYER, 0, 0);
 }
 
 bool j1EntityManager::Load(pugi::xml_node&)

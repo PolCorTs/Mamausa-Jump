@@ -8,7 +8,7 @@
 #include "j1Globals.h"
 
 
-j1Collision::j1Collision()	: j1Module()
+j1Collision::j1Collision() : j1Module()
 {
 	for (uint i = 0; i < MAX_COLLIDERS; ++i)
 		colliders[i] = nullptr;
@@ -19,7 +19,7 @@ j1Collision::j1Collision()	: j1Module()
 
 	matrix[COLLIDER_PLAYER][COLLIDER_WALL] = true;
 	matrix[COLLIDER_PLAYER][COLLIDER_PLAYER] = false;
-	
+
 }
 
 // Destructor
@@ -48,8 +48,8 @@ bool j1Collision::PreUpdate()
 		if (colliders[i] == nullptr)
 			continue;
 
-		if(colliders[i]->type == COLLIDER_PLAYER)
-		{ 
+		if (colliders[i]->type == COLLIDER_PLAYER)
+		{
 			c1 = colliders[i];
 
 			// avoid checking collisions already checked
