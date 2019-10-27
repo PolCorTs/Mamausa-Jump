@@ -15,11 +15,23 @@ j1Collision::j1Collision() : j1Module()
 
 	matrix[COLLIDER_WALL][COLLIDER_WALL] = false;
 	matrix[COLLIDER_WALL][COLLIDER_PLAYER] = true;
-
+	matrix[COLLIDER_WALL][COLLIDER_END] = false;
+	matrix[COLLIDER_WALL][COLLIDER_DEATH] = false;
 
 	matrix[COLLIDER_PLAYER][COLLIDER_WALL] = true;
 	matrix[COLLIDER_PLAYER][COLLIDER_PLAYER] = false;
+	matrix[COLLIDER_PLAYER][COLLIDER_DEATH] = true;
+	matrix[COLLIDER_PLAYER][COLLIDER_END] = true;
 
+	matrix[COLLIDER_DEATH][COLLIDER_WALL] = false;
+	matrix[COLLIDER_DEATH][COLLIDER_PLAYER] = true;
+	matrix[COLLIDER_DEATH][COLLIDER_DEATH] = false;
+	matrix[COLLIDER_DEATH][COLLIDER_END] = false;
+
+	matrix[COLLIDER_END][COLLIDER_WALL] = false;
+	matrix[COLLIDER_END][COLLIDER_PLAYER] = true;
+	matrix[COLLIDER_END][COLLIDER_DEATH] = false;
+	matrix[COLLIDER_END][COLLIDER_END] = false;
 }
 
 // Destructor
@@ -137,7 +149,7 @@ void j1Collision::DrawColliders()
 		case COLLIDER_WALL:		//Blue															
 			App->render->DrawQuad(colliders[i]->rect, 0, 0, 255, alpha);
 			break;
-		case COLLIDER_WIN:		//Green															
+		case COLLIDER_END:		//Green															
 			App->render->DrawQuad(colliders[i]->rect, 0, 255, 0, alpha);
 			break;
 		case COLLIDER_DEATH:	//Red

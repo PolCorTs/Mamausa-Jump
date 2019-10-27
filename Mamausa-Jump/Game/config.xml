@@ -21,10 +21,10 @@
 <player>
 	<size width="69" height="95"/>
 	<margin x="2" y="417"/>
-	<deathByFallCollider h="10"/>
+	<initialPlayerPosition x="67" y="750"/>
 	<speed>
-	  <movement initialVertical="-150.0f" vertical="-150.0f" horizontal="80.0f" godmode="120.0f"/>
-	  <physics initialFalling="0.0f" falling="0.0f" acceleration="550.0f"  jumpNumber="0" maxJumps="2"/>
+	  <movement initialVertical="-2.0f" verticalSpeed="0.0f"/>
+	  <physics initialFalling="0.0f" fallingSpeed="0.0f" gravity="0.01f"  initialJumps="0" maxJumps="2"/>
 	</speed>
   </player>
 
@@ -36,8 +36,5 @@
     <folder>maps/</folder>
   </map>
 
- <scene1>
-	<initialPlayerPosition x="2" y="17"/>
-  </scene1>
 
 </config>

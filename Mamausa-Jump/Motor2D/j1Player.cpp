@@ -90,7 +90,6 @@ bool j1Player::Update(float dt) {
 				animation = &idle;
 			}
 
-			// Direction controls	
 			if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT) {
 				if (wallInFront == false) {
 					player_position.x += speed.x;
@@ -106,8 +105,9 @@ bool j1Player::Update(float dt) {
 					player_position.x -= speed.x;
 					animation = &run;
 				}
-				else
+				else {
 					animation = &idle;
+				}
 			}
 
 			if (OnGround == false && jumping == false) {
@@ -136,8 +136,8 @@ bool j1Player::Update(float dt) {
 
 				freefall = false;
 				jumping = true;
-
 			}
+
 			if (jumping) {
 				App->audio->PlayFx(jumpSound);
 
@@ -180,6 +180,10 @@ bool j1Player::Update(float dt) {
 		else {
 			Draw(r, true, player_position.x, player_position.y);
 		}
+
+		//Camera Update
+
+		//App->render->camera.x = -player_position.x;
 	}
 
 	return true;
@@ -191,10 +195,8 @@ bool j1Player::PostUpdate() {
 
 	loading = false;
 	OnGround = false;
-	// Resetting the jump if touched the "ceiling"
-	wallAbove = false;
 
-	// Resetting the movement
+	wallAbove = false;
 	wallInFront = false;
 	wallBehind = false;
 
@@ -223,7 +225,6 @@ bool j1Player::Load(pugi::xml_node& data) {
 		collider->type = COLLIDER_PLAYER;
 	}
 
-
 	return true;
 }
 
@@ -236,13 +237,10 @@ bool j1Player::Save(pugi::xml_node& data) const {
 	pos.append_attribute("y") = player_position.y;
 
 	pugi::xml_node godmode = data.append_child("godmode");
+	godmode.append_attribute("value") = GodMode;
 
 	pugi::xml_node life = data.append_child("lives");
 	life.append_attribute("value") = lives;
-
-	godmode.append_attribute("value") = GodMode;
-
-
 
 	return true;
 }
@@ -298,6 +296,7 @@ void j1Player::OnCollision(Collider* c1, Collider* c2)
 					//player_position.y = c2->rect.y - c1->rect.h + 1;
 
 					OnGround = true;
+					jumping = false;
 
 					LOG("TOUCHING DOWN");
 				}
@@ -309,23 +308,23 @@ void j1Player::OnCollision(Collider* c1, Collider* c2)
 
 		//Death
 
-		/*if (c2->type == COLLIDER_DEATH) {
-			if (!playedFx) {
+		if (c2->type == COLLIDER_DEATH) {
+			/*if (!playedFx) {
 				App->audio->PlayFx(App->audio->deathFx);
 				playedFx = true;
 			}
 
 			animation = &deathAnim;
-			isDead = true;
-		}*/
+			isDead = true;*/
+		}
 
 		//Win
 
-		/*if (c2->type == COLLIDER_WIN) {
-			touchingWin = true;
+		if (c2->type == COLLIDER_END) {
+			/*touchingWin = true;
 			playerCanMove = false;
-			c2->to_delete = true;
-		}*/
+			c2->to_delete = true;*/
+		}
 	}
 }
 
@@ -340,16 +339,17 @@ void j1Player::LoadPlayerProperties() {
 	pugi::xml_node player;
 	player = config.child("player");
 
-	// Copying the size of the player
+	//Player
+	player_position.x = player.child("initialPlayerPosition").attribute("x").as_int();
+	player_position.y = player.child("initialPlayerPosition").attribute("y").as_int();
 	playerSize.x = player.child("size").attribute("width").as_int();
 	playerSize.y = player.child("size").attribute("height").as_int();
 	margin.x = player.child("margin").attribute("x").as_int();
 	margin.y = player.child("margin").attribute("y").as_int();
 
-	// Copying values of the speed
-	pugi::xml_node speed = player.child("speed");
-
 	//Speed
+
+	pugi::xml_node speed = player.child("speed");
 
 	//Jump
 
