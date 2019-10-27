@@ -37,6 +37,7 @@ public:
 	bool Save(pugi::xml_node&) const;
 
 	void LoadPlayerProperties();
+	void Jump();
 
 public:
 
@@ -55,7 +56,6 @@ public:
 	uint attackSound;
 	uint lifeup;
 
-	bool facingRight = true;
 
 	fPoint initialPosition;
 	fPoint player_position;
@@ -72,7 +72,6 @@ public:
 	uint lives;
 	uint currentJumps;
 	uint initialJumps;
-	uint doubleJump = 2;
 
 	Collider* attackCollider = nullptr;
 
@@ -93,19 +92,18 @@ public:
 	bool wallBehind = false;
 	bool wallAbove = false;
 
+	bool facingRight = true;
+
 	bool GodMode = false;
 	bool playerIdle = false;
 	bool jumping = false;
+	bool doubleJump = false;
 	bool freefall = false;
 
 	bool playerCanMove = false;
 	bool player_start = false;
 	bool loading = false;
 	bool dead = false;
-	bool playedSound = false;
-	bool deathByFall = false;
-	bool attacking = false;
-	bool extra_life = false;
 
 	int cameraLimit;
 

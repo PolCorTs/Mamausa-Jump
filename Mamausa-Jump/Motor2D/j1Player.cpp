@@ -122,27 +122,27 @@ bool j1Player::Update(float dt) {
 
 			if (OnGround) {
 				jumping = false;
+				doubleJump = false;
 
-				currentJumps = initialJumps;
 				fallingSpeed = initialFallingSpeed;
 				verticalSpeed = initialVerticalSpeed;
 			}
 
-			if (App->input->GetKey(SDL_SCANCODE_SPACE) == j1KeyState::KEY_DOWN && currentJumps < maxJumps) {
+			if (App->input->GetKey(SDL_SCANCODE_SPACE) == j1KeyState::KEY_DOWN && OnGround) {
 
 				LOG("Jumping");
 
-				currentJumps++;
-
 				freefall = false;
 				jumping = true;
+				
+			}
+			else if (App->input->GetKey(SDL_SCANCODE_SPACE) == j1KeyState::KEY_DOWN && !OnGround) {
+				verticalSpeed = initialVerticalSpeed;
+				doubleJump = true;
 			}
 
-			if (jumping) {
-				App->audio->PlayFx(jumpSound);
-
-				player_position.y += verticalSpeed;
-				verticalSpeed += Gravity;
+			if (jumping == true || doubleJump == true) {
+				Jump();
 			}
 		}
 
@@ -183,10 +183,15 @@ bool j1Player::Update(float dt) {
 
 		//Camera Update
 
-		//App->render->camera.x = -player_position.x;
+		
 	}
 
 	return true;
+}
+
+void j1Player::Jump() {
+	player_position.y += verticalSpeed;
+	verticalSpeed += Gravity;
 }
 
 
