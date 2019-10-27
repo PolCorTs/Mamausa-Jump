@@ -70,7 +70,6 @@ public:
 	uint points = 0;
 	uint score_points = 0;
 	uint lives;
-	uint currentJumps;
 	uint initialJumps;
 
 	Collider* attackCollider = nullptr;
@@ -96,9 +95,10 @@ public:
 
 	bool GodMode = false;
 	bool playerIdle = false;
-	bool jumping = false;
-	bool doubleJump = false;
 	bool freefall = false;
+	bool jumping = false;
+	bool canDoubleJump = true;
+	bool doubleJump = false;
 
 	bool playerCanMove = false;
 	bool player_start = false;

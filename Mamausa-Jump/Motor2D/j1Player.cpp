@@ -43,9 +43,6 @@ bool j1Player::Start() {
 	Gravity = 0.01f;
 	verticalSpeed = 0.0f;
 	initialVerticalSpeed = -2.0f;
-
-	currentJumps = 0;
-	initialJumps = 0;
 	maxJumps = 2;
 
 	godModeSpeed = 1;
@@ -118,10 +115,12 @@ bool j1Player::Update(float dt) {
 				player_position.y += fallingSpeed;
 				fallingSpeed += Gravity;
 				animation = &fall;
+				canDoubleJump = false;
 			}
 
 			if (OnGround) {
 				jumping = false;
+				canDoubleJump = true;
 				doubleJump = false;
 
 				fallingSpeed = initialFallingSpeed;
@@ -136,8 +135,9 @@ bool j1Player::Update(float dt) {
 				jumping = true;
 				
 			}
-			else if (App->input->GetKey(SDL_SCANCODE_SPACE) == j1KeyState::KEY_DOWN && !OnGround) {
+			else if (App->input->GetKey(SDL_SCANCODE_SPACE) == j1KeyState::KEY_DOWN && !OnGround && canDoubleJump) {
 				verticalSpeed = initialVerticalSpeed;
+				canDoubleJump = false;
 				doubleJump = true;
 			}
 
@@ -271,6 +271,7 @@ void j1Player::OnCollision(Collider* c1, Collider* c2)
 	{
 		if (c2->type == COLLIDER_WALL)
 		{
+			
 			// Right & Left Collisions
 			if (c1->rect.y <= c2->rect.y + c2->rect.h && c1->rect.y + c1->rect.h - 5 >= c2->rect.y)
 			{
@@ -298,10 +299,9 @@ void j1Player::OnCollision(Collider* c1, Collider* c2)
 				// down
 				if (c1->rect.y + c1->rect.h >= c2->rect.y && c1->rect.y < c2->rect.y) {
 
-					//player_position.y = c2->rect.y - c1->rect.h + 1;
+					//player_position.y = c2->rect.y - c1->rect.h;
 
 					OnGround = true;
-					jumping = false;
 
 					LOG("TOUCHING DOWN");
 				}
