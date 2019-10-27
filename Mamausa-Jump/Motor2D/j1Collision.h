@@ -54,7 +54,7 @@ public:
 
 	Collider* AddCollider(SDL_Rect rect, COLLIDER_TYPE type, j1Module* callback = nullptr);
 	void DrawColliders();
-	bool debug = true;
+	bool debug = false;
 
 private:
 
