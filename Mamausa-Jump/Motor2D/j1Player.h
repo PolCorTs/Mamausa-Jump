@@ -59,10 +59,10 @@ public:
 
 	fPoint initialPosition;
 	fPoint player_position;
+	fPoint speed;
 
 	iPoint playerSize;
 	iPoint margin;
-	iPoint speed;
 
 	uint maxJumps;
 	uint colisionMargin;
@@ -85,7 +85,7 @@ public:
 	float fallingSpeed;
 	float initialFallingSpeed;
 	// "Gravity"
-	float verticalAcceleration;
+	float Gravity;
 
 	// It tells you wether the player has landed, has a wall in front, a wall behind or a wall above
 	bool OnGround = false;

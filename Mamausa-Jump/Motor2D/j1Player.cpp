@@ -38,7 +38,16 @@ bool j1Player::Start() {
 
 	player_start = true;
 
-	speed = { 1, 1 };
+	fallingSpeed = 0.0f;
+	initialFallingSpeed = 0.0f;
+	Gravity = 0.015f;
+	verticalSpeed = 0.0f;
+	initialVerticalSpeed = 3.0f;
+
+	currentJumps = 0;
+	initialJumps = 0;
+
+	speed = { 0.5, 0.5 };
 
 	return true;
 }
@@ -83,13 +92,9 @@ bool j1Player::Update(float dt) {
 
 			// Direction controls	
 			if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT) {
-				if (wallInFront == false && dead == false) {
+				if (wallInFront == false) {
 					player_position.x += speed.x;
 					animation = &run;
-				}
-				else if (dead == true) {
-					facingRight = true;
-					animation = &idle;
 				}
 				else {
 					animation = &idle;
@@ -97,93 +102,54 @@ bool j1Player::Update(float dt) {
 			}
 
 			if (App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_REPEAT) {
-				if (wallBehind == false && dead == false) {
+				if (wallBehind == false) {
 					player_position.x -= speed.x;
 					animation = &run;
-				}
-				else if (dead == true) {
-					facingRight = false;
-					animation = &idle;
 				}
 				else
 					animation = &idle;
 			}
 
-			if (App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_REPEAT) {
-				if (wallInFront == false && dead == false) {
-					player_position.y -= speed.y;
-					animation = &run;
-				}
-				else if (dead == true) {
-					facingRight = true;
-					animation = &idle;
-				}
-				else {
-					animation = &idle;
-				}
-			}
-
 			if (App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_REPEAT) {
-				if (OnGround == false && dead == false) {
+				if (OnGround == false) {
 					player_position.y += speed.y;
 					animation = &run;
-				}
-				else if (dead == true) {
-					facingRight = false;
-					animation = &idle;
 				}
 				else
 					animation = &idle;
 			}
 
 			if (OnGround == false && jumping == false) {
-
 				freefall = true;
-
-				if (!attacking)
-					animation = &fall;
+			}
+			
+			if (freefall == true) {
+				player_position.y += fallingSpeed;
+				fallingSpeed += Gravity;
+				animation = &fall;
 			}
 
-			if (App->input->GetKey(SDL_SCANCODE_SPACE) == j1KeyState::KEY_DOWN) {
-				if ((currentJumps == initialJumps && freefall == true) || (currentJumps < maxJumps && freefall == false)) {
-					jumping = true;
-					verticalSpeed = initialVerticalSpeed;
-					currentJumps++;
+			if (OnGround == true) {
+				freefall = false;
+				jumping = false;
 
-					if (freefall == true || (currentJumps > 1 && freefall == false))
-						App->audio->PlayFx(jumpSound);
-				}
+				fallingSpeed = initialFallingSpeed;
+				verticalSpeed = initialVerticalSpeed;
 			}
 
-			// Reseting the jump every frame
-			OnGround = false;
-			if (dead && deathByFall == false)
-				animation = &death;
+			if (App->input->GetKey(SDL_SCANCODE_SPACE) == j1KeyState::KEY_DOWN || App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_REPEAT) {
+				jumping = true;
 
-			if (jumping == true && animation != &death) {
-				//If the player touches a wall collider
-				if (OnGround) {
+				currentJumps++;
+				App->audio->PlayFx(jumpSound);
 
-					animation = &idle;
-					jumping = false;
-				}
-				else {
-
-					// While the player is falling
-					if (!attacking) {
-						if (verticalSpeed <= 0) {
-							animation = &jump;
-						}
-						else if (verticalSpeed > 0) {
-							animation = &fall;
-						}
-					}
-				}
+				player_position.y -= verticalSpeed;
+				verticalSpeed += Gravity;
 			}
 		}
 
 		// God mode
-		if (App->input->GetKey(SDL_SCANCODE_F10) == j1KeyState::KEY_DOWN && dead == false)
+		if (App->input->GetKey(SDL_SCANCODE_F10) == j1KeyState::KEY_DOWN)
 		{
 			GodMode = !GodMode;
 
@@ -196,32 +162,6 @@ bool j1Player::Update(float dt) {
 			else if (GodMode == false)
 			{
 				collider->type = COLLIDER_PLAYER;
-			}
-		}
-		if (dead && App->fade->IsFading() == false)
-			lives--;
-
-		if (dead) {
-			// Death animation is not shown if the player dies by falling
-			if (!deathByFall)
-				animation = &death;
-
-			// Restarting the level in case the player dies
-			if (App->fade->IsFading() == 0)
-			{
-				player_position.x = initialPosition.x;
-				player_position.y = initialPosition.y;
-				fallingSpeed = initialFallingSpeed;
-				jumping = false;
-				facingRight = true;
-				deathByFall = false;
-				playedSound = false;
-
-				// Resetting the animation
-				death.Reset();
-				animation = &idle;
-
-				dead = false;
 			}
 		}
 
@@ -249,7 +189,7 @@ bool j1Player::Update(float dt) {
 bool j1Player::PostUpdate() {
 
 	loading = false;
-
+	OnGround = false;
 	// Resetting the jump if touched the "ceiling"
 	wallAbove = false;
 
@@ -333,48 +273,31 @@ void j1Player::OnCollision(Collider* c1, Collider* c2)
 				// right
 				if (c1->rect.x + c1->rect.w >= c2->rect.x && c1->rect.x <= c2->rect.x)
 				{
-					ColRight = true;
-					ColLeft = false;
+					wallInFront = true;
+				}
+				else {
+					wallInFront = false;
 				}
 				// left
-				else if (c1->rect.x <= c2->rect.x + c2->rect.w && c1->rect.x + c1->rect.w >= c2->rect.x + c2->rect.w)
+				if (c1->rect.x <= c2->rect.x + c2->rect.w && c1->rect.x + c1->rect.w >= c2->rect.x + c2->rect.w)
 				{
-					ColLeft = true;
-					ColRight = false;
+					wallBehind = true;
+				}
+				else {
+					wallBehind = false;
 				}
 			}
 
 			// Up & Down Collisions
-			if (c1->rect.x + c1->rect.w >= c2->rect.x + 4 && c1->rect.x + 4 <= c2->rect.x + c2->rect.w)
+			if (c1->rect.x + c1->rect.w >= c2->rect.x && c1->rect.x <= c2->rect.x + c2->rect.w)
 			{
 				// down
-				if (c1->rect.y + c1->rect.h >= c2->rect.y && c1->rect.y < c2->rect.y) {
+				if (c1->rect.y + c1->rect.h + 10 >= c2->rect.y && c1->rect.y < c2->rect.y) {
 
 					OnGround = true;
-					jumping = false;
-
-					player_position.y = c2->rect.y - c1->rect.h + 1;
-
-					speed.y = 0;
-					doubleJump = 2;
-
 					ColDown = true;
-					ColUp = false;
-					playerCanMove = true;
 
 					LOG("TOUCHING DOWN");
-				}
-				// up
-				else if (c1->rect.y <= c2->rect.y + c2->rect.h && c1->rect.y > c2->rect.y) {
-
-					OnGround = false;
-
-					player_position.y = c2->rect.y + c2->rect.h;
-
-					ColDown = false;
-					ColUp = true;
-
-					LOG("TOUCHING UP");
 				}
 			}
 		}
