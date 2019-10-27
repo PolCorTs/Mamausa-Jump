@@ -189,12 +189,6 @@ bool j1Player::Update(float dt) {
 	return true;
 }
 
-void j1Player::Jump() {
-	player_position.y += verticalSpeed;
-	verticalSpeed += Gravity;
-}
-
-
 // Call modules after each loop iteration
 bool j1Player::PostUpdate() {
 
@@ -263,6 +257,13 @@ bool j1Player::CleanUp() {
 	return true;
 }
 
+//Jump
+
+void j1Player::Jump() {
+	player_position.y += verticalSpeed;
+	verticalSpeed += Gravity;
+}
+
 // Detects Collisions
 
 void j1Player::OnCollision(Collider* c1, Collider* c2)
@@ -298,8 +299,6 @@ void j1Player::OnCollision(Collider* c1, Collider* c2)
 			{
 				// down
 				if (c1->rect.y + c1->rect.h >= c2->rect.y && c1->rect.y < c2->rect.y) {
-
-					//player_position.y = c2->rect.y - c1->rect.h;
 
 					OnGround = true;
 
