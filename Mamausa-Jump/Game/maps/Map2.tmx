@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.4" orientation="orthogonal" renderorder="right-down" width="120" height="20" tilewidth="70" tileheight="70" infinite="0" nextlayerid="6" nextobjectid="26">
+<map version="1.2" tiledversion="1.2.4" orientation="orthogonal" renderorder="right-down" width="120" height="20" tilewidth="70" tileheight="70" infinite="0" nextlayerid="6" nextobjectid="59">
  <tileset firstgid="1" name="tiles_spritesheet" tilewidth="70" tileheight="70" spacing="2" tilecount="522" columns="18">
-  <image source="../Documents/GitHub/Mamausa-Jump/Mamausa-Jump/Game/maps/tiles_spritesheet.png" width="1294" height="2086"/>
+  <image source="tiles_spritesheet.png" width="1294" height="2086"/>
  </tileset>
  <tileset firstgid="523" name="bg_grasslands" tilewidth="70" tileheight="70" tilecount="3420" columns="171">
-  <image source="../Documents/GitHub/Mamausa-Jump/Mamausa-Jump/Game/maps/bg_grasslands.png" width="12000" height="1400"/>
+  <image source="bg_grasslands.png" width="12000" height="1400"/>
  </tileset>
  <layer id="1" name="Background" width="120" height="20">
   <data>
@@ -3796,10 +3796,10 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="128"/>
+   <tile gid="110"/>
+   <tile gid="110"/>
+   <tile gid="92"/>
    <tile/>
    <tile/>
    <tile/>
@@ -4030,10 +4030,10 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="128"/>
+   <tile gid="110"/>
+   <tile gid="110"/>
+   <tile gid="92"/>
    <tile/>
    <tile/>
    <tile/>
@@ -4185,11 +4185,11 @@
    <tile/>
    <tile/>
    <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
-   <tile/>
+   <tile gid="128"/>
+   <tile gid="110"/>
+   <tile gid="110"/>
+   <tile gid="110"/>
+   <tile gid="92"/>
    <tile/>
    <tile/>
    <tile/>
@@ -4814,7 +4814,38 @@
    <tile gid="225"/>
   </data>
  </layer>
- <objectgroup id="3" name="Platforms"/>
- <objectgroup id="4" name="death_collider"/>
- <objectgroup id="5" name="end_collider"/>
+ <objectgroup id="3" name="Platforms">
+  <object id="28" x="-1.33333" y="1256" width="841.333" height="142.667"/>
+  <object id="29" x="1190.67" y="1261.33" width="965.333" height="138.667"/>
+  <object id="30" x="1333.33" y="1190.67" width="456" height="68"/>
+  <object id="33" x="1401.33" y="1118.67" width="346.667" height="70.6667"/>
+  <object id="34" x="1472" y="1049.33" width="276" height="68"/>
+  <object id="35" x="1540" y="976" width="208" height="73.3333"/>
+  <object id="36" x="1609.33" y="908" width="138.667" height="66.6667"/>
+  <object id="37" x="1749.33" y="840" width="209.333" height="350.667"/>
+  <object id="38" x="1961.33" y="1045.33" width="137.333" height="214.667"/>
+  <object id="39" x="1793.33" y="1190.67" width="166.667" height="68"/>
+  <object id="40" x="2154" y="1188" width="716" height="210"/>
+  <object id="41" x="2098" y="1190" width="56" height="70"/>
+  <object id="42" x="2868" y="1120" width="488" height="280"/>
+  <object id="43" x="3638" y="1116" width="350" height="286"/>
+  <object id="44" x="3986" y="1186" width="916" height="218"/>
+  <object id="45" x="4058" y="908" width="278" height="74"/>
+  <object id="46" x="4480" y="764" width="278" height="72"/>
+  <object id="47" x="4900" y="1116" width="424" height="278"/>
+  <object id="48" x="5810" y="1118" width="556" height="280"/>
+  <object id="49" x="6510" y="978" width="348" height="68"/>
+  <object id="50" x="6368" y="1260" width="630" height="138"/>
+  <object id="51" x="7002" y="1186" width="274" height="214"/>
+  <object id="52" x="7492" y="1186" width="276" height="216"/>
+  <object id="54" x="7772" y="1256" width="636" height="144"/>
+ </objectgroup>
+ <objectgroup id="4" name="death_collider">
+  <object id="56" x="7278" y="1280" width="214" height="118"/>
+  <object id="57" x="5320" y="1216" width="488" height="182"/>
+  <object id="58" x="3358" y="1214" width="278" height="182"/>
+ </objectgroup>
+ <objectgroup id="5" name="end_collider">
+  <object id="55" x="8262" y="1150" width="64" height="108"/>
+ </objectgroup>
 </map>
