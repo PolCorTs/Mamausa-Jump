@@ -93,11 +93,6 @@ public:
 	bool wallBehind = false;
 	bool wallAbove = false;
 
-	bool ColRight = false;
-	bool ColLeft = false;
-	bool ColUp = false;
-	bool ColDown = false;
-
 	bool GodMode = false;
 	bool playerIdle = false;
 	bool jumping = false;

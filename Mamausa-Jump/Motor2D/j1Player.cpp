@@ -40,13 +40,15 @@ bool j1Player::Start() {
 
 	fallingSpeed = 0.0f;
 	initialFallingSpeed = 0.0f;
-	Gravity = 0.015f;
+	Gravity = 0.01f;
 	verticalSpeed = 0.0f;
-	initialVerticalSpeed = 3.0f;
+	initialVerticalSpeed = -2.0f;
 
 	currentJumps = 0;
 	initialJumps = 0;
+	maxJumps = 2;
 
+	godModeSpeed = 1;
 	speed = { 0.5, 0.5 };
 
 	return true;
@@ -66,23 +68,21 @@ bool j1Player::Update(float dt) {
 
 			animation = &godmode;
 
-			if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT)
-			{
+			if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT) {
 				player_position.x += godModeSpeed;
-				facingRight = true;
 			}
 
-			if (App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_REPEAT)
-			{
+			if (App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_REPEAT) {
 				player_position.x -= godModeSpeed;
-				facingRight = false;
 			}
 
-			if (App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_REPEAT)
+			if (App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_REPEAT) {
 				player_position.y -= godModeSpeed;
+			}
 
-			if (App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_REPEAT)
+			if (App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_REPEAT) {
 				player_position.y += godModeSpeed;
+			}
 		}
 		else {
 
@@ -110,40 +110,38 @@ bool j1Player::Update(float dt) {
 					animation = &idle;
 			}
 
-			if (App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_REPEAT) {
-				if (OnGround == false) {
-					player_position.y += speed.y;
-					animation = &run;
-				}
-				else
-					animation = &idle;
-			}
-
 			if (OnGround == false && jumping == false) {
 				freefall = true;
 			}
-			
+
 			if (freefall == true) {
 				player_position.y += fallingSpeed;
 				fallingSpeed += Gravity;
 				animation = &fall;
 			}
 
-			if (OnGround == true) {
-				freefall = false;
+			if (OnGround) {
 				jumping = false;
 
+				currentJumps = initialJumps;
 				fallingSpeed = initialFallingSpeed;
 				verticalSpeed = initialVerticalSpeed;
 			}
 
-			if (App->input->GetKey(SDL_SCANCODE_SPACE) == j1KeyState::KEY_DOWN || App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_REPEAT) {
-				jumping = true;
+			if (App->input->GetKey(SDL_SCANCODE_SPACE) == j1KeyState::KEY_DOWN && currentJumps < maxJumps) {
+
+				LOG("Jumping");
 
 				currentJumps++;
+
+				freefall = false;
+				jumping = true;
+
+			}
+			if (jumping) {
 				App->audio->PlayFx(jumpSound);
 
-				player_position.y -= verticalSpeed;
+				player_position.y += verticalSpeed;
 				verticalSpeed += Gravity;
 			}
 		}
@@ -167,8 +165,11 @@ bool j1Player::Update(float dt) {
 
 		// Update collider position to player position
 
-		if (collider != nullptr)
+		if (collider != nullptr) {
+
 			collider->SetPos(player_position.x + margin.x, player_position.y + margin.y);
+
+		}
 
 		// Blitting the player
 		SDL_Rect r = animation->GetCurrentFrame(dt);
@@ -179,9 +180,9 @@ bool j1Player::Update(float dt) {
 		else {
 			Draw(r, true, player_position.x, player_position.y);
 		}
-
-		return true;
 	}
+
+	return true;
 }
 
 
@@ -292,12 +293,16 @@ void j1Player::OnCollision(Collider* c1, Collider* c2)
 			if (c1->rect.x + c1->rect.w >= c2->rect.x && c1->rect.x <= c2->rect.x + c2->rect.w)
 			{
 				// down
-				if (c1->rect.y + c1->rect.h + 10 >= c2->rect.y && c1->rect.y < c2->rect.y) {
+				if (c1->rect.y + c1->rect.h >= c2->rect.y && c1->rect.y < c2->rect.y) {
+
+					//player_position.y = c2->rect.y - c1->rect.h + 1;
 
 					OnGround = true;
-					ColDown = true;
 
 					LOG("TOUCHING DOWN");
+				}
+				else {
+					OnGround = false;
 				}
 			}
 		}
