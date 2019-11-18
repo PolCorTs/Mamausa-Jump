@@ -27,8 +27,8 @@ j1Player::j1Player(int x, int y, ENTITY_TYPES type) : j1Entity(x, y, ENTITY_TYPE
 
 j1Player::~j1Player() {}
 
-bool j1Player::Start() {
-
+bool j1Player::Start() 
+{
 	LOG("Loading player textures");
 	sprites = App->tex->Load("textures/AlienBlue.png");
 
@@ -40,108 +40,126 @@ bool j1Player::Start() {
 
 	fallingSpeed = 0.0f;
 	initialFallingSpeed = 0.0f;
-	Gravity = 0.01f;
+	gravity = 0.02f;
 	verticalSpeed = 0.0f;
-	initialVerticalSpeed = -2.0f;
+	initialVerticalSpeed = -2.5f;
 	maxJumps = 2;
 
-	godModeSpeed = 1;
-	speed = { 0.5, 0.5 };
+	godModeSpeed = 2;
+	speed = 1.3;
 
 	return true;
 }
 
-bool j1Player::PreUpdate() {
-
+bool j1Player::PreUpdate() 
+{
 	return true;
 }
 
-bool j1Player::Update(float dt) {
-
+bool j1Player::Update(float dt) 
+{
 	if (player_start)
 	{
-
-		if (GodMode) {
-
+		if (godMode) 
+		{
 			animation = &godmode;
 
-			if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT) {
+			if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT) 
+			{
 				player_position.x += godModeSpeed;
 			}
 
-			if (App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_REPEAT) {
+			if (App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_REPEAT) 
+			{
 				player_position.x -= godModeSpeed;
 			}
 
-			if (App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_REPEAT) {
+			if (App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_REPEAT) 
+			{
 				player_position.y -= godModeSpeed;
 			}
 
-			if (App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_REPEAT) {
+			if (App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_REPEAT) 
+			{
 				player_position.y += godModeSpeed;
 			}
 		}
 		else {
 
-			if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_IDLE && App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_IDLE) {
+			if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_IDLE && App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_IDLE) 
+			{
 				animation = &idle;
 			}
 
-			if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT) {
-				if (wallInFront == false) {
-					player_position.x += speed.x;
+			if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT) 
+			{
+				if (wallInFront == false) 
+				{
+					player_position.x += speed;
 					animation = &run;
 				}
-				else {
+				else 
+				{
 					animation = &idle;
 				}
 			}
 
-			if (App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_REPEAT) {
-				if (wallBehind == false) {
-					player_position.x -= speed.x;
+			if (App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_REPEAT) 
+			{
+				if (wallBehind == false) 
+				{
+					player_position.x -= speed;
 					animation = &run;
 				}
-				else {
+				else 
+				{
 					animation = &idle;
 				}
 			}
 
-			if (OnGround == false && jumping == false) {
+			if (onGround == false && jumping == false) 
+			{
 				freefall = true;
 			}
 
-			if (freefall == true) {
+			if (freefall == true)
+			{
 				player_position.y += fallingSpeed;
-				fallingSpeed += Gravity;
+				fallingSpeed += gravity;
 				animation = &fall;
 				canDoubleJump = false;
 			}
 
-			if (OnGround) {
+			if (onGround) 
+			{
+				freefall = false;
 				jumping = false;
-				canDoubleJump = true;
 				doubleJump = false;
+				canDoubleJump = true;
 
 				fallingSpeed = initialFallingSpeed;
 				verticalSpeed = initialVerticalSpeed;
 			}
 
-			if (App->input->GetKey(SDL_SCANCODE_SPACE) == j1KeyState::KEY_DOWN && OnGround) {
-
-				LOG("Jumping");
-
+			if (App->input->GetKey(SDL_SCANCODE_SPACE) == j1KeyState::KEY_DOWN && onGround) 
+			{
 				freefall = false;
 				jumping = true;
-				
+
+				LOG("Jump");
 			}
-			else if (App->input->GetKey(SDL_SCANCODE_SPACE) == j1KeyState::KEY_DOWN && !OnGround && canDoubleJump) {
+
+			else if (App->input->GetKey(SDL_SCANCODE_SPACE) == j1KeyState::KEY_DOWN && !onGround && canDoubleJump) 
+			{
 				verticalSpeed = initialVerticalSpeed;
 				canDoubleJump = false;
 				doubleJump = true;
+
+				LOG("DoubleJump");
 			}
 
-			if (jumping == true || doubleJump == true) {
+			if (jumping == true || doubleJump == true) 
+			{
 				Jump();
 			}
 		}
@@ -149,15 +167,15 @@ bool j1Player::Update(float dt) {
 		// God mode
 		if (App->input->GetKey(SDL_SCANCODE_F10) == j1KeyState::KEY_DOWN)
 		{
-			GodMode = !GodMode;
+			godMode = !godMode;
 
-			if (GodMode == true)
+			if (godMode == true) 
 			{
 				collider->type = COLLIDER_NONE;
 				animation = &godmode;
 
 			}
-			else if (GodMode == false)
+			else if (godMode == false)
 			{
 				collider->type = COLLIDER_PLAYER;
 			}
@@ -165,35 +183,36 @@ bool j1Player::Update(float dt) {
 
 		// Update collider position to player position
 
-		if (collider != nullptr) {
-
+		if (collider != nullptr) 
+		{
 			collider->SetPos(player_position.x + margin.x, player_position.y + margin.y);
-
 		}
 
 		// Blitting the player
 		SDL_Rect r = animation->GetCurrentFrame(dt);
 
-		if (facingRight) {
+		if (facingRight) 
+		{
 			Draw(r, false, player_position.x, player_position.y);
 		}
-		else {
+
+		else 
+		{
 			Draw(r, true, player_position.x, player_position.y);
 		}
 
 		//Camera Update
 
-		
 	}
 
 	return true;
 }
 
 // Call modules after each loop iteration
-bool j1Player::PostUpdate() {
-
+bool j1Player::PostUpdate() 
+{
 	loading = false;
-	OnGround = false;
+	onGround = false;
 
 	wallAbove = false;
 	wallInFront = false;
@@ -203,23 +222,24 @@ bool j1Player::PostUpdate() {
 }
 
 // Load game state
-bool j1Player::Load(pugi::xml_node& data) {
-
+bool j1Player::Load(pugi::xml_node& data) 
+{
 	player_position.x = data.child("player").child("position").attribute("x").as_int();
 	player_position.y = data.child("player").child("position").attribute("y").as_int();
 
-	GodMode = data.child("player").child("godmode").attribute("value").as_bool();
+	godMode = data.child("player").child("godmode").attribute("value").as_bool();
 
 	lives = data.child("player").child("lives").attribute("value").as_uint();
 
 	loading = true;
 
-	if (GodMode == true)
+	if (godMode == true)
 	{
 		collider->type = COLLIDER_NONE;
 		animation = &godmode;
 	}
-	else if (GodMode == false)
+
+	else if (godMode == false)
 	{
 		collider->type = COLLIDER_PLAYER;
 	}
@@ -228,15 +248,15 @@ bool j1Player::Load(pugi::xml_node& data) {
 }
 
 // Save game state
-bool j1Player::Save(pugi::xml_node& data) const {
-
+bool j1Player::Save(pugi::xml_node& data) const 
+{
 	pugi::xml_node pos = data.append_child("position");
 
 	pos.append_attribute("x") = player_position.x;
 	pos.append_attribute("y") = player_position.y;
 
 	pugi::xml_node godmode = data.append_child("godmode");
-	godmode.append_attribute("value") = GodMode;
+	godmode.append_attribute("value") = godMode;
 
 	pugi::xml_node life = data.append_child("lives");
 	life.append_attribute("value") = lives;
@@ -245,8 +265,8 @@ bool j1Player::Save(pugi::xml_node& data) const {
 }
 
 // Called before quitting
-bool j1Player::CleanUp() {
-
+bool j1Player::CleanUp() 
+{
 	// Remove all memory leaks
 	LOG("Unloading the player");
 	App->tex->UnLoad(sprites);
@@ -259,9 +279,10 @@ bool j1Player::CleanUp() {
 
 //Jump
 
-void j1Player::Jump() {
+void j1Player::Jump() 
+{
 	player_position.y += verticalSpeed;
-	verticalSpeed += Gravity;
+	verticalSpeed += gravity;
 }
 
 // Detects Collisions
@@ -298,21 +319,24 @@ void j1Player::OnCollision(Collider* c1, Collider* c2)
 			if (c1->rect.x + c1->rect.w >= c2->rect.x && c1->rect.x <= c2->rect.x + c2->rect.w)
 			{
 				// down
-				if (c1->rect.y + c1->rect.h >= c2->rect.y && c1->rect.y < c2->rect.y) {
+				if (c1->rect.y + c1->rect.h >= c2->rect.y && c1->rect.y < c2->rect.y) 
+				{
 
-					OnGround = true;
+					onGround = true;
 
 					LOG("TOUCHING DOWN");
 				}
-				else {
-					OnGround = false;
+				else
+				{
+					onGround = false;
 				}
 			}
 		}
 
 		//Death
 
-		if (c2->type == COLLIDER_DEATH) {
+		if (c2->type == COLLIDER_DEATH) 
+		{
 			/*if (!playedFx) {
 				App->audio->PlayFx(App->audio->deathFx);
 				playedFx = true;
@@ -324,7 +348,8 @@ void j1Player::OnCollision(Collider* c1, Collider* c2)
 
 		//Win
 
-		if (c2->type == COLLIDER_END) {
+		if (c2->type == COLLIDER_END) 
+		{
 			/*touchingWin = true;
 			playerCanMove = false;
 			c2->to_delete = true;*/
@@ -332,8 +357,8 @@ void j1Player::OnCollision(Collider* c1, Collider* c2)
 	}
 }
 
-void j1Player::LoadPlayerProperties() {
-
+void j1Player::LoadPlayerProperties() 
+{
 	pugi::xml_document config_file;
 	config_file.load_file("config.xml");
 
@@ -361,4 +386,3 @@ void j1Player::LoadPlayerProperties() {
 
 	deathByFallColliderHeight = player.child("deathByFallCollider").attribute("h").as_uint();
 }
-

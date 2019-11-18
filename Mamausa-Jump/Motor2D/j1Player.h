@@ -56,10 +56,8 @@ public:
 	uint attackSound;
 	uint lifeup;
 
-
 	fPoint initialPosition;
 	fPoint player_position;
-	fPoint speed;
 
 	iPoint playerSize;
 	iPoint margin;
@@ -74,26 +72,23 @@ public:
 
 	Collider* attackCollider = nullptr;
 
+	float speed;
 	float godModeSpeed;
 	float horizontalSpeed;
-	//Jumping speed
 	float initialVerticalSpeed;
 	float verticalSpeed;
-	// Free fall speed
 	float fallingSpeed;
 	float initialFallingSpeed;
-	// "Gravity"
-	float Gravity;
+	float gravity;
 
-	// It tells you wether the player has landed, has a wall in front, a wall behind or a wall above
-	bool OnGround = false;
+	bool onGround = false;
 	bool wallInFront = false;
 	bool wallBehind = false;
 	bool wallAbove = false;
 
 	bool facingRight = true;
 
-	bool GodMode = false;
+	bool godMode = false;
 	bool playerIdle = false;
 	bool freefall = false;
 	bool jumping = false;
