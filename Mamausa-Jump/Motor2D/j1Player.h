@@ -15,33 +15,23 @@ class j1Player : public j1Entity
 public:
 	j1Player(int x, int y, ENTITY_TYPES type);
 
-	// Destructor
 	virtual ~j1Player();
 
-	// Called before the first frame
 	bool Start();
-
-	// Called each loop iteration
 	bool PreUpdate();
 	bool Update(float dt);
 	bool PostUpdate();
-
-	// Called before quitting
 	bool CleanUp();
 
-	// Called to check collisions
-	void OnCollision(Collider* c1, Collider* c2);
-
-	// Load / Save
 	bool Load(pugi::xml_node&);
 	bool Save(pugi::xml_node&) const;
 
+	void OnCollision(Collider* c1, Collider* c2);
+
+	void UpdateCameraPosition();
 	void LoadPlayerProperties();
-	void Jump();
 
-public:
-
-	// Animations of the player
+	// Animations player
 	Animation idle;
 	Animation run;
 	Animation jump;
@@ -99,11 +89,6 @@ public:
 	bool player_start = false;
 	bool loading = false;
 	bool dead = false;
-
-	int cameraLimit;
-
-private:
-	int playerLimit;
 
 	bool loadedAudios = false;
 };

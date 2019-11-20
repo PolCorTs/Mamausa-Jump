@@ -49,32 +49,16 @@ bool j1Scene::PreUpdate()
 // Called each loop iteration
 bool j1Scene::Update(float dt)
 {
-	
-	if (App->entity->player != nullptr)
+
+	if (App->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN)
 	{
-		if (Pmove) {
-			if (App->render->camera.x >= -App->entity->player->position.x * App->win->GetScale() + App->win->width / 2) {
-				App->render->camera.x -= 3.5f;
-				App->entity->player->playerCanMove = false;
-			}
-			else {
-				Pmove = false;
-				App->entity->player->playerCanMove = true;
-			}
-		}
-	
-	else
-		App->render->camera.x = -App->entity->player->position.x * App->win->GetScale() + App->win->width / 2;
-	
+		App->LoadGame("save_game.xml");
 	}
 
-
-	
-	if (App->input->GetKey(SDL_SCANCODE_F6) == KEY_DOWN)
-		App->LoadGame("save_game.xml");
-	
 	if (App->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN)
+	{
 		App->SaveGame("save_game.xml");
+	}
 
 	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
 		App->render->camera.y += 1;
@@ -87,33 +71,33 @@ bool j1Scene::Update(float dt)
 
 	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
 		App->render->camera.x -= 1;
-	
+
 	App->map->Draw();
+
 
 	//Camera Limits
 
-	if (App->entity->player != nullptr)
-		App->render->camera.x = -App->entity->player->player_position.x;
-
-	//Limit X Start
-
-	if (App->render->camera.x > 0)
+	/*
+	if (App->render->camera.x > 0)	//Limit X Start
+	{
 		App->render->camera.x = 0;
+	}
 
-	//Limit X End
-
-	if (App->render->camera.x < -7100)
+	if (App->render->camera.x < -7100)	//Limit X End
+	{
 		App->render->camera.x = -7100;
+	}
 
-	//Limit Y Start
-
-	if (App->render->camera.y > 0)
+	if (App->render->camera.y > 0)	//Limit Y Start
+	{
 		App->render->camera.y = 0;
+	}
 
-	//Limit Y End
-
-	if (App->render->camera.y < -400)
+	if (App->render->camera.y < -400)	//Limit Y End
+	{
 		App->render->camera.y = -400;
+	}
+	*/
 
 	int x, y;
 	App->input->GetMousePosition(x, y);

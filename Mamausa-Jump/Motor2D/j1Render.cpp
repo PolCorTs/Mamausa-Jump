@@ -40,6 +40,7 @@ bool j1Render::Awake(pugi::xml_node& config)
 		LOG("Could not create the renderer! SDL_Error: %s\n", SDL_GetError());
 		ret = false;
 	}
+
 	else
 	{
 		camera.w = App->win->screen_surface->w;
@@ -47,7 +48,6 @@ bool j1Render::Awake(pugi::xml_node& config)
 		camera.x = 0;
 		camera.y = -400;
 		virtual_camera_pos = camera.x;
-
 	}
 
 	return ret;
@@ -57,8 +57,10 @@ bool j1Render::Awake(pugi::xml_node& config)
 bool j1Render::Start()
 {
 	LOG("render start");
-	// back background
+
+	SDL_RenderSetLogicalSize(renderer, App->win->width, App->win->height);
 	SDL_RenderGetViewport(renderer, &viewport);
+
 	return true;
 }
 
@@ -71,9 +73,6 @@ bool j1Render::PreUpdate()
 
 bool j1Render::Update(float dt)
 {
-
-	//camera.x = virtual_camera_pos;
-
 	return true;
 }
 

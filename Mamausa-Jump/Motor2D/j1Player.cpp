@@ -40,13 +40,13 @@ bool j1Player::Start()
 
 	fallingSpeed = 0.0f;
 	initialFallingSpeed = 0.0f;
-	gravity = 0.02f;
+	gravity = 0.01f; //0.02
 	verticalSpeed = 0.0f;
-	initialVerticalSpeed = -2.5f;
+	initialVerticalSpeed = -2.0f; //-2.5f
 	maxJumps = 2;
 
-	godModeSpeed = 2;
-	speed = 1.3;
+	godModeSpeed = 1; //2
+	speed = 0.8; //1.3
 
 	return true;
 }
@@ -93,6 +93,8 @@ bool j1Player::Update(float dt)
 
 			if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT) 
 			{
+				facingRight = true;
+
 				if (wallInFront == false) 
 				{
 					player_position.x += speed;
@@ -106,6 +108,8 @@ bool j1Player::Update(float dt)
 
 			if (App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_REPEAT) 
 			{
+				facingRight = false;
+
 				if (wallBehind == false) 
 				{
 					player_position.x -= speed;
@@ -132,7 +136,6 @@ bool j1Player::Update(float dt)
 
 			if (onGround) 
 			{
-				freefall = false;
 				jumping = false;
 				doubleJump = false;
 				canDoubleJump = true;
@@ -160,7 +163,8 @@ bool j1Player::Update(float dt)
 
 			if (jumping == true || doubleJump == true) 
 			{
-				Jump();
+				player_position.y += verticalSpeed;
+				verticalSpeed += gravity;
 			}
 		}
 
@@ -195,15 +199,16 @@ bool j1Player::Update(float dt)
 		{
 			Draw(r, false, player_position.x, player_position.y);
 		}
-
-		else 
+		
+		else if (!facingRight)
 		{
 			Draw(r, true, player_position.x, player_position.y);
 		}
-
-		//Camera Update
-
 	}
+
+	//Camera Update
+
+	UpdateCameraPosition();
 
 	return true;
 }
@@ -277,14 +282,6 @@ bool j1Player::CleanUp()
 	return true;
 }
 
-//Jump
-
-void j1Player::Jump() 
-{
-	player_position.y += verticalSpeed;
-	verticalSpeed += gravity;
-}
-
 // Detects Collisions
 
 void j1Player::OnCollision(Collider* c1, Collider* c2)
@@ -293,7 +290,6 @@ void j1Player::OnCollision(Collider* c1, Collider* c2)
 	{
 		if (c2->type == COLLIDER_WALL)
 		{
-			
 			// Right & Left Collisions
 			if (c1->rect.y <= c2->rect.y + c2->rect.h && c1->rect.y + c1->rect.h - 5 >= c2->rect.y)
 			{
@@ -302,7 +298,8 @@ void j1Player::OnCollision(Collider* c1, Collider* c2)
 				{
 					wallInFront = true;
 				}
-				else {
+				else 
+				{
 					wallInFront = false;
 				}
 				// left
@@ -314,17 +311,18 @@ void j1Player::OnCollision(Collider* c1, Collider* c2)
 					wallBehind = false;
 				}
 			}
-
 			// Up & Down Collisions
-			if (c1->rect.x + c1->rect.w >= c2->rect.x && c1->rect.x <= c2->rect.x + c2->rect.w)
+			if (c1->rect.x + c1->rect.w >= c2->rect.x && c1->rect.x < c2->rect.x + c2->rect.w)
 			{
 				// down
 				if (c1->rect.y + c1->rect.h >= c2->rect.y && c1->rect.y < c2->rect.y) 
 				{
 
 					onGround = true;
+					freefall = false;
 
 					LOG("TOUCHING DOWN");
+
 				}
 				else
 				{
@@ -357,6 +355,19 @@ void j1Player::OnCollision(Collider* c1, Collider* c2)
 	}
 }
 
+void j1Player::UpdateCameraPosition() {
+	if (player_position.x > 400) 
+	{
+		App->render->camera.x = -player_position.x + 400;
+	}
+	/*
+	if (player_position.y > 700 && App->render->camera.y < -400) 
+	{
+		App->render->camera.y = -player_position.y + 350;
+	}
+	*/
+}
+
 void j1Player::LoadPlayerProperties() 
 {
 	pugi::xml_document config_file;
@@ -380,9 +391,6 @@ void j1Player::LoadPlayerProperties()
 
 	pugi::xml_node speed = player.child("speed");
 
-	//Jump
-
-	cameraLimit = config.child("scene1").child("camera").attribute("cameraLimit").as_int();
 
 	deathByFallColliderHeight = player.child("deathByFallCollider").attribute("h").as_uint();
 }
