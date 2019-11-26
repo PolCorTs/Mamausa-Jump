@@ -46,8 +46,8 @@ public:
 	uint attackSound;
 	uint lifeup;
 
-	fPoint initialPosition;
-	fPoint player_position;
+	//fPoint initialPosition;
+	//fPoint position;
 
 	iPoint playerSize;
 	iPoint margin;

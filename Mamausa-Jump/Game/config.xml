@@ -2,6 +2,7 @@
 
 <config>
   <app>
+  <app framerate_cap="30">
     <title>Mamausa Jumps</title>
     <organization>UPC</organization>
   </app>
