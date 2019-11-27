@@ -188,9 +188,6 @@ void j1App::FinishUpdate()
 		prev_last_sec_frame_count = last_sec_frame_count;
 		last_sec_frame_count = 0;
 	}
-
-
-
 }
 
 // Call modules before each loop iteration
