@@ -48,11 +48,7 @@ public:
 	uint lifeup;
 
 	fPoint initialPosition;
-<<<<<<< HEAD
 	fPoint position;
-=======
-	fPoint player_position;
->>>>>>> parent of 63703db... Started dt (not working yet)
 
 	iPoint playerSize;
 	iPoint margin;
