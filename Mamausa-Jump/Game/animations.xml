@@ -5,7 +5,7 @@
       <animation x="143" y="0" w="67" h="92"/>
     </idle>
 
-    <run loop="true" speed="5.0f">
+    <run loop="true" speed="7.0f">
       <animation  x="0" y="0" w="66" h="93"/>
       <animation  x="70" y="0" w="66" h="95"/>
     </run>
