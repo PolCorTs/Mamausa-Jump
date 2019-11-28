@@ -357,7 +357,11 @@ void j1Player::OnCollision(Collider* c1, Collider* c2)
 
 void j1Player::UpdateCameraPosition() {
 <<<<<<< HEAD
+<<<<<<< HEAD
 	if (position.x > 400)
+=======
+	if (player_position.x > 400) 
+>>>>>>> parent of 63703db... Started dt (not working yet)
 =======
 	if (player_position.x > 400) 
 >>>>>>> parent of 63703db... Started dt (not working yet)
@@ -366,9 +370,15 @@ void j1Player::UpdateCameraPosition() {
 	}
 	/*
 <<<<<<< HEAD
+<<<<<<< HEAD
 	if (position.y > 700 && App->render->camera.y < -400)
 	{
 		App->render->camera.y = -position.y + 350;
+=======
+	if (player_position.y > 700 && App->render->camera.y < -400) 
+	{
+		App->render->camera.y = -player_position.y + 350;
+>>>>>>> parent of 63703db... Started dt (not working yet)
 =======
 	if (player_position.y > 700 && App->render->camera.y < -400) 
 	{
