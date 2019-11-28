@@ -173,7 +173,6 @@ void j1App::FinishUpdate()
 	if (want_to_load == true)
 		LoadGameNow();
 <<<<<<< HEAD
-<<<<<<< HEAD
 
 	if (last_sec_frame_time.Read > 1000) {
 		
@@ -181,8 +180,6 @@ void j1App::FinishUpdate()
 		prev_last_sec_frame_count = last_sec_frame_count;
 		last_sec_frame_count = 0;
 	}
-=======
->>>>>>> parent of 63703db... Started dt (not working yet)
 =======
 >>>>>>> parent of 63703db... Started dt (not working yet)
 }

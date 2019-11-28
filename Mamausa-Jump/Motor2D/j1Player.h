@@ -49,11 +49,7 @@ public:
 
 	fPoint initialPosition;
 <<<<<<< HEAD
-<<<<<<< HEAD
 	fPoint position;
-=======
-	fPoint player_position;
->>>>>>> parent of 63703db... Started dt (not working yet)
 =======
 	fPoint player_position;
 >>>>>>> parent of 63703db... Started dt (not working yet)
