@@ -4,6 +4,7 @@
 #include "j1EntityManager.h"
 #include "p2Point.h"
 #include "p2DynArray.h"
+#include "p2Log.h"
 
 struct Collider;
 class Animation;
@@ -34,19 +35,24 @@ public:
 		return true;
 	};
 
+public:
+
 	virtual bool Load(pugi::xml_node&) { return true; };
 	virtual bool Save(pugi::xml_node&) { return true; };
 
-	virtual void Draw(SDL_Rect r, bool flip = false, float x = 0, float y = 0);
+	virtual void Draw(SDL_Rect r, bool flip = false, int x = 0, int y = 0);
 	virtual void OnCollision(Collider* c1, Collider* c2) {};
 
 	ENTITY_TYPES type;
 
 	fPoint position;
+	fPoint initialPosition;
+	float speed;
 
 	Animation* animation = nullptr;
 	Collider* collider = nullptr;
 	SDL_Texture* sprites = nullptr;
 
-}
+};
+
 #endif // __ENTITY_H__

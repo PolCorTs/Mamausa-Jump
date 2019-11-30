@@ -172,14 +172,6 @@ void j1App::FinishUpdate()
 
 	if (want_to_load == true)
 		LoadGameNow();
-
-	/*if (last_sec_frame_time.Read > 1000) {
-		
-		last_sec_frame_time.Start();
-		prev_last_sec_frame_count = last_sec_frame_count;
-		last_sec_frame_count = 0;
-	}*/
-
 }
 
 // Call modules before each loop iteration
