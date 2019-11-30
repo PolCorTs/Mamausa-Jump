@@ -6,7 +6,7 @@
 #include "p2List.h"
 #include "p2Point.h"
 #include "j1Collision.h"
-#include "j1Entity.h"
+//#include "j1Entity.h"
 
 #define MAX_ENTITIES 100
 

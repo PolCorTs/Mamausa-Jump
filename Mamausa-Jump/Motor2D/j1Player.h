@@ -50,6 +50,8 @@ public:
 	fPoint initialPosition;
 	fPoint position;
 
+	fPoint player_position;
+
 	iPoint playerSize;
 	iPoint margin;
 

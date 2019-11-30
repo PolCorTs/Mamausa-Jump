@@ -15,7 +15,7 @@ j1Player::j1Player(int x, int y, ENTITY_TYPES type) : j1Entity(x, y, ENTITY_TYPE
 {
 	animation = NULL;
 
-	position = { (float)x, (float)y };
+	player_position = { (float)x, (float)y };
 
 	idle.LoadAnimations("idle");
 	run.LoadAnimations("run");
@@ -34,7 +34,7 @@ bool j1Player::Start()
 
 	LoadPlayerProperties();
 
-	collider = App->collision->AddCollider({ (int)position.x, (int)position.y, playerSize.x, playerSize.y }, COLLIDER_PLAYER, App->entity);
+	collider = App->collision->AddCollider({ (int)player_position.x, (int)player_position.y, playerSize.x, playerSize.y }, COLLIDER_PLAYER, App->entity);
 
 	player_start = true;
 
@@ -66,22 +66,22 @@ bool j1Player::Update(float dt)
 
 			if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT)
 			{
-				position.x += godModeSpeed;
+				player_position.x += godModeSpeed;
 			}
 
 			if (App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_REPEAT)
 			{
-				position.x -= godModeSpeed;
+				player_position.x -= godModeSpeed;
 			}
 
 			if (App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_REPEAT)
 			{
-				position.y -= godModeSpeed;
+				player_position.y -= godModeSpeed;
 			}
 
 			if (App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_REPEAT)
 			{
-				position.y += godModeSpeed;
+				player_position.y += godModeSpeed;
 			}
 		}
 		else {
@@ -97,7 +97,7 @@ bool j1Player::Update(float dt)
 
 				if (wallInFront == false)
 				{
-					position.x += speed;
+					player_position.x += speed;
 					animation = &run;
 				}
 				else
@@ -112,7 +112,7 @@ bool j1Player::Update(float dt)
 
 				if (wallBehind == false)
 				{
-					position.x -= speed;
+					player_position.x -= speed;
 					animation = &run;
 				}
 				else
@@ -128,7 +128,7 @@ bool j1Player::Update(float dt)
 
 			if (freefall == true)
 			{
-				position.y += fallingSpeed;
+				player_position.y += fallingSpeed;
 				fallingSpeed += gravity;
 				animation = &fall;
 				canDoubleJump = false;
@@ -163,7 +163,7 @@ bool j1Player::Update(float dt)
 
 			if (jumping == true || doubleJump == true)
 			{
-				position.y += verticalSpeed;
+				player_position.y += verticalSpeed;
 				verticalSpeed += gravity;
 			}
 		}
@@ -189,12 +189,23 @@ bool j1Player::Update(float dt)
 
 		if (collider != nullptr)
 		{
-			collider->SetPos(position.x + margin.x, position.y + margin.y);
+			collider->SetPos(player_position.x + margin.x, player_position.y + margin.y);
 		}
 
 		// Blitting the player
 
 		Draw(animation->GetCurrentFrame(dt), facingRight, position.x, position.y);
+
+		if (facingRight) 
+		{
+			Draw(r, false, player_position.x, player_position.y);
+		}
+		
+		else if (!facingRight)
+		{
+			Draw(r, true, player_position.x, player_position.y);
+		}
+
 	}
 
 	//Camera Update
@@ -220,8 +231,8 @@ bool j1Player::PostUpdate()
 // Load game state
 bool j1Player::Load(pugi::xml_node& data)
 {
-	position.x = data.child("player").child("position").attribute("x").as_int();
-	position.y = data.child("player").child("position").attribute("y").as_int();
+	player_position.x = data.child("player").child("position").attribute("x").as_int();
+	player_position.y = data.child("player").child("position").attribute("y").as_int();
 
 	godMode = data.child("player").child("godmode").attribute("value").as_bool();
 
@@ -248,8 +259,8 @@ bool j1Player::Save(pugi::xml_node& data) const
 {
 	pugi::xml_node pos = data.append_child("position");
 
-	pos.append_attribute("x") = position.x;
-	pos.append_attribute("y") = position.y;
+	pos.append_attribute("x") = player_position.x;
+	pos.append_attribute("y") = player_position.y;
 
 	pugi::xml_node godmode = data.append_child("godmode");
 	godmode.append_attribute("value") = godMode;
@@ -344,14 +355,18 @@ void j1Player::OnCollision(Collider* c1, Collider* c2)
 }
 
 void j1Player::UpdateCameraPosition() {
-	if (position.x > 400)
+
+
+	if (player_position.x > 400) 
+
 	{
-		App->render->camera.x = -position.x + 400;
+		App->render->camera.x = -player_position.x + 400;
 	}
 	/*
-	if (position.y > 700 && App->render->camera.y < -400)
+
+	if (player_position.y > 700 && App->render->camera.y < -400) 
 	{
-		App->render->camera.y = -position.y + 350;
+		App->render->camera.y = -player_position.y + 350;
 	}
 	*/
 }
@@ -368,8 +383,8 @@ void j1Player::LoadPlayerProperties()
 	player = config.child("player");
 
 	//Player
-	position.x = player.child("initialPlayerPosition").attribute("x").as_int();
-	position.y = player.child("initialPlayerPosition").attribute("y").as_int();
+	player_position.x = player.child("initialPlayerPosition").attribute("x").as_int();
+	player_position.y = player.child("initialPlayerPosition").attribute("y").as_int();
 	playerSize.x = player.child("size").attribute("width").as_int();
 	playerSize.y = player.child("size").attribute("height").as_int();
 	margin.x = player.child("margin").attribute("x").as_int();
