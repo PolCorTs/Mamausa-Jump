@@ -47,7 +47,7 @@ public:
 	uint lifeup;
 
 	fPoint initialPosition;
-	fPoint player_position;
+	fPoint position;
 
 	iPoint playerSize;
 	iPoint margin;
