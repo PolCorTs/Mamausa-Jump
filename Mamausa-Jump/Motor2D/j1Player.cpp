@@ -46,7 +46,7 @@ bool j1Player::Start()
 	maxJumps = 2;
 
 	godModeSpeed = 1; //2
-	speed = 0.8; //1.3
+	speed = 0.5; //1.3
 
 	return true;
 }
@@ -297,36 +297,33 @@ void j1Player::OnCollision(Collider* c1, Collider* c2)
 				if (c1->rect.x + c1->rect.w >= c2->rect.x && c1->rect.x <= c2->rect.x)
 				{
 					wallInFront = true;
-				}
-				else 
-				{
-					wallInFront = false;
+					wallBehind = false;
 				}
 				// left
-				if (c1->rect.x <= c2->rect.x + c2->rect.w && c1->rect.x + c1->rect.w >= c2->rect.x + c2->rect.w)
+				else if (c1->rect.x <= c2->rect.x + c2->rect.w && c1->rect.x + c1->rect.w >= c2->rect.x + c2->rect.w)
 				{
+					wallInFront = false;
 					wallBehind = true;
-				}
-				else {
-					wallBehind = false;
 				}
 			}
 			// Up & Down Collisions
-			if (c1->rect.x + c1->rect.w >= c2->rect.x && c1->rect.x < c2->rect.x + c2->rect.w)
+			if (c1->rect.x + c1->rect.w >= c2->rect.x + 5 && c1->rect.x + 5 <= c2->rect.x + c2->rect.w)
 			{
 				// down
-				if (c1->rect.y + c1->rect.h >= c2->rect.y && c1->rect.y < c2->rect.y) 
+				if (c1->rect.y + c1->rect.h >= c2->rect.y && c1->rect.y < c2->rect.y)
 				{
-
 					onGround = true;
 					freefall = false;
 
 					LOG("TOUCHING DOWN");
-
-				}
-				else
+				}// up
+				else if (c1->rect.y <= c2->rect.y + c2->rect.h && c1->rect.y > c2->rect.y)
 				{
 					onGround = false;
+
+					verticalSpeed = 0.1f;
+
+					LOG("TOUCHING UP");
 				}
 			}
 		}
