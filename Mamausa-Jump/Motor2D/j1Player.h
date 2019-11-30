@@ -18,6 +18,7 @@ public:
 	virtual ~j1Player();
 
 	bool Start();
+
 	bool PreUpdate();
 	bool Update(float dt);
 	bool PostUpdate();
@@ -47,7 +48,7 @@ public:
 	uint lifeup;
 
 	fPoint initialPosition;
-	fPoint player_position;
+	fPoint position;
 
 	iPoint playerSize;
 	iPoint margin;
@@ -91,6 +92,6 @@ public:
 	bool dead = false;
 
 	bool loadedAudios = false;
-};
+}
 
 #endif // __jPLAYER_H__
