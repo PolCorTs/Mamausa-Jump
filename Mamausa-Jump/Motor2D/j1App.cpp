@@ -15,6 +15,7 @@
 #include "j1Collision.h"
 #include "j1Entity.h"
 #include "j1FadeToBlack.h"
+#include "j1Pathfinding.h"
 
 
 // Constructor
@@ -33,6 +34,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	collision = new j1Collision();
 	entity = new j1EntityManager();
 	fade = new j1FadeToBlack();
+	pathfinding = new j1Pathfinding();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -45,6 +47,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(collision);
 	AddModule(entity);
 	AddModule(fade);
+	AddModule(pathfinding);
 
 	// render last to swap buffer
 	AddModule(render);
@@ -89,6 +92,8 @@ bool j1App::Awake()
 		app_config = config.child("app");
 		title.create(app_config.child("title").child_value());
 		organization.create(app_config.child("organization").child_value());
+
+		framerate_cap = config.child("app").attribute("framerate_cap").as_uint;
 	}
 
 	if (ret == true)
@@ -162,6 +167,12 @@ pugi::xml_node j1App::LoadConfig(pugi::xml_document& config_file) const
 // ---------------------------------------------
 void j1App::PrepareUpdate()
 {
+	frame_count++;
+	last_sec_frame_count++;
+
+	dt = frame_time.ReadSec();
+	frame_time.Start();
+
 }
 
 // ---------------------------------------------
@@ -172,6 +183,13 @@ void j1App::FinishUpdate()
 
 	if (want_to_load == true)
 		LoadGameNow();
+
+	if (last_sec_frame_time.Read > 1000) {
+
+		last_sec_frame_time.Start();
+		prev_last_sec_frame_count = last_sec_frame_count;
+		last_sec_frame_count = 0;
+	}
 }
 
 // Call modules before each loop iteration
