@@ -1,6 +1,10 @@
 #ifndef __j1WINDOW_H__
 #define __j1WINDOW_H__
 
+#define SCREEN_WIDTH 640
+#define SCREEN_HEIGHT 480 
+#define SCREEN_SIZE 1
+
 #include "j1Module.h"
 
 struct SDL_Window;

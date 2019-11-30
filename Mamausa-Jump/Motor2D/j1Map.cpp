@@ -41,7 +41,6 @@ void j1Map::Draw()
 		//if(layer->properties.Get("Nodraw") != 0)
 		//continue;
 
-
 		for (int y = 0; y < data.height; ++y)
 		{
 			for (int x = 0; x < data.width; ++x)
@@ -59,17 +58,11 @@ void j1Map::Draw()
 					if (item->data->name == "Map")
 						App->render->Blit(tileset->texture, pos.x, pos.y, &r);
 					else if (item->data->name == "Background")
-						App->render->Blit(tileset->texture, pos.x, pos.y, &r, 0.05f);
-
-
+						App->render->Blit(tileset->texture, pos.x, pos.y, &r, SDL_FLIP_NONE, 0.05f);
 				}
 			}
 		}
 	}
-
-
-
-
 }
 
 int Properties::Get(const char* value, int default_value) const
