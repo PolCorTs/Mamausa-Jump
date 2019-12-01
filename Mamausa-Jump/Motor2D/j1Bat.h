@@ -5,7 +5,7 @@
 #include "p2Point.h"
 #include "p2Animation.h"
 #include "p2DynArray.h"
-#include "j1Pathfinding.h"
+#include "j1PathFinding.h"
 #include "j1Entity.h"
 
 #define DETECTION_RANGE 100

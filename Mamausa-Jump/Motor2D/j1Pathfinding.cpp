@@ -1,25 +1,23 @@
 #include "p2Defs.h"
 #include "p2Log.h"
 #include "j1App.h"
-#include "j1Pathfinding.h"
+#include "j1PathFinding.h"
 
-#include "Brofiler/Brofiler.h"
-
-j1Pathfinding::j1Pathfinding() : j1Module(), map(NULL), last_path(DEFAULT_PATH_LENGTH), width(0), height(0)
+j1PathFinding::j1PathFinding() : j1Module(), map(NULL), last_path(DEFAULT_PATH_LENGTH), width(0), height(0)
 {
-	name.create("Pathfinding");
+	name.create("pathfinding");
 }
 
 // Destructor
-j1Pathfinding::~j1Pathfinding()
+j1PathFinding::~j1PathFinding()
 {
 	RELEASE_ARRAY(map);
 }
 
 // Called before quitting
-bool j1Pathfinding::CleanUp()
+bool j1PathFinding::CleanUp()
 {
-	LOG("Freeing Pathfinding library");
+	LOG("Freeing pathfinding library");
 
 	last_path.Clear();
 	RELEASE_ARRAY(map);
@@ -27,7 +25,7 @@ bool j1Pathfinding::CleanUp()
 }
 
 // Sets up the walkability map
-void j1Pathfinding::SetMap(uint width, uint height, uchar* data)
+void j1PathFinding::SetMap(uint width, uint height, uchar* data)
 {
 	this->width = width;
 	this->height = height;
@@ -38,21 +36,21 @@ void j1Pathfinding::SetMap(uint width, uint height, uchar* data)
 }
 
 // Utility: return true if pos is inside the map boundaries
-bool j1Pathfinding::CheckBoundaries(const iPoint& pos) const
+bool j1PathFinding::CheckBoundaries(const iPoint& pos) const
 {
 	return (pos.x >= 0 && pos.x <= (int)width &&
 		pos.y >= 0 && pos.y <= (int)height);
 }
 
 // Utility: returns true is the tile is walkable
-bool j1Pathfinding::IsWalkable(const iPoint& pos) const
+bool j1PathFinding::IsWalkable(const iPoint& pos) const
 {
 	uchar t = GetTileAt(pos);
 	return t != INVALID_WALK_CODE && t > 0;
 }
 
 // Utility: return the walkability value of a tile
-uchar j1Pathfinding::GetTileAt(const iPoint& pos) const
+uchar j1PathFinding::GetTileAt(const iPoint& pos) const
 {
 	if (CheckBoundaries(pos))
 		return map[(pos.y*width) + pos.x];
@@ -60,7 +58,7 @@ uchar j1Pathfinding::GetTileAt(const iPoint& pos) const
 	return INVALID_WALK_CODE;
 }
 
-Movement j1Pathfinding::CheckDirection(p2DynArray<iPoint>& path) const
+Movement j1PathFinding::CheckDirection(p2DynArray<iPoint>& path) const
 {
 	if (path.Count() >= 2)
 	{
@@ -83,7 +81,7 @@ Movement j1Pathfinding::CheckDirection(p2DynArray<iPoint>& path) const
 	else return NONE;
 }
 
-Movement j1Pathfinding::CheckDirectionGround(p2DynArray<iPoint>& path) const
+Movement j1PathFinding::CheckDirectionGround(p2DynArray<iPoint>& path) const
 {
 	if (path.Count() >= 2)
 	{
@@ -103,7 +101,7 @@ Movement j1Pathfinding::CheckDirectionGround(p2DynArray<iPoint>& path) const
 }
 
 // To request all tiles involved in the last generated path
-const p2DynArray<iPoint>* j1Pathfinding::GetLastPath() const
+const p2DynArray<iPoint>* j1PathFinding::GetLastPath() const
 {
 	return &last_path;
 }
@@ -164,25 +162,6 @@ uint PathNode::FindWalkableAdjacents(PathList& list_to_fill) const
 	iPoint cell;
 	uint before = list_to_fill.list.count();
 
-	// north
-	cell.create(pos.x, pos.y + 1);
-	if (App->pathfinding->IsWalkable(cell))
-		list_to_fill.list.add(PathNode(-1, -1, cell, this));
-
-	// south
-	cell.create(pos.x, pos.y - 1);
-	if (App->pathfinding->IsWalkable(cell))
-		list_to_fill.list.add(PathNode(-1, -1, cell, this));
-
-	// east
-	cell.create(pos.x + 1, pos.y);
-	if (App->pathfinding->IsWalkable(cell))
-		list_to_fill.list.add(PathNode(-1, -1, cell, this));
-
-	// west
-	cell.create(pos.x - 1, pos.y);
-	if (App->pathfinding->IsWalkable(cell))
-		list_to_fill.list.add(PathNode(-1, -1, cell, this));
 
 	//north-east
 	cell.create(pos.x + 1, pos.y + 1);
@@ -203,6 +182,28 @@ uint PathNode::FindWalkableAdjacents(PathList& list_to_fill) const
 	cell.create(pos.x - 1, pos.y - 1);
 	if (App->pathfinding->IsWalkable(cell))
 		list_to_fill.list.add(PathNode(-1, -1, cell, this));
+
+	// north
+	cell.create(pos.x, pos.y + 1);
+	if (App->pathfinding->IsWalkable(cell))
+		list_to_fill.list.add(PathNode(-1, -1, cell, this));
+
+	// south
+	cell.create(pos.x, pos.y - 1);
+	if (App->pathfinding->IsWalkable(cell))
+		list_to_fill.list.add(PathNode(-1, -1, cell, this));
+
+	// east
+	cell.create(pos.x + 1, pos.y);
+	if (App->pathfinding->IsWalkable(cell))
+		list_to_fill.list.add(PathNode(-1, -1, cell, this));
+
+	// west
+	cell.create(pos.x - 1, pos.y);
+	if (App->pathfinding->IsWalkable(cell))
+		list_to_fill.list.add(PathNode(-1, -1, cell, this));
+
+
 
 	return list_to_fill.list.count();
 }
@@ -233,15 +234,15 @@ int PathNode::CalculateF(const iPoint& destination)
 // ----------------------------------------------------------------------------------
 // Actual A* algorithm: return number of steps in the creation of the path or -1 ----
 // ----------------------------------------------------------------------------------
-p2DynArray<iPoint>* j1Pathfinding::CreatePath(iPoint& origin, iPoint& destination)
+p2DynArray<iPoint>* j1PathFinding::CreatePath(iPoint& origin, iPoint& destination)
 {
 	BROFILER_CATEGORY("CreatePath", Profiler::Color::SlateGray)
 
-	last_path.Clear();
-	
+		last_path.Clear();
+	// If origin or destination are not walkable, return -1
 	if (IsWalkable(origin) && IsWalkable(destination)) {
 
-		// Add origin	to open, iterate while there are tiles in the open list
+		// We create two lists: open, close, and we add the origin tile to open, and iterate while we have tile in the open list
 		PathList open, close;
 		PathNode origin(0, origin.DistanceNoSqrt(destination), origin, nullptr);
 		open.list.add(origin);
@@ -254,52 +255,56 @@ p2DynArray<iPoint>* j1Pathfinding::CreatePath(iPoint& origin, iPoint& destinatio
 
 			if (close.list.end->data.pos != destination)
 			{
-				//List of adjacent nodes
-				PathList adjacent;
+				// We fill a list of all adjancent nodes
+				PathList adjancent;
 
-				// Iterate adjacents
-				close.list.end->data.FindWalkableAdjacents(adjacent);
+				// We iterate adjancent nodes:
+				close.list.end->data.FindWalkableAdjacents(adjancent);
 
-				for (p2List_item<PathNode>* iterator = adjacent.list.start; iterator != nullptr; iterator = iterator->next)
+				for (p2List_item<PathNode>* iterator = adjancent.list.start; iterator != nullptr; iterator = iterator->next)
 				{
-					// Ignore the closed list
+					// Ignore nodes in the closed list
 					if (close.Find(iterator->data.pos))
 						continue;
 
-					// Compare Gs between nodes
+					// If it is already in the open list, check if it is a better path (compare G)
 					else if (open.Find(iterator->data.pos))
 					{
 						PathNode tmp = open.Find(iterator->data.pos)->data;
 						iterator->data.CalculateF(destination);
 						if (tmp.g > iterator->data.g)
 						{
-							// Update parent if better
+							// If it is a better path, Update the parent
 							tmp.parent = iterator->data.parent;
 						}
 					}
-					// Calculate F and add to list
+					// If it is NOT found, calculate its F and add it to the open list
 					else
 					{
 						iterator->data.CalculateF(destination);
 						open.list.add(iterator->data);
 					}
 				}
-				adjacent.list.clear();
+				adjancent.list.clear();
 			}
 			else
 			{
+				// If we just added the destination, we are done!
 				for (p2List_item<PathNode>* iterator = close.list.end; iterator->data.parent != nullptr; iterator = close.Find(iterator->data.parent->pos))
 				{
-					// Create final path
+					// Backtrack to create the final path
 					last_path.PushBack(iterator->data.pos);
 					if (iterator->data.parent == nullptr)
 						last_path.PushBack(close.list.start->data.pos);
 				}
 
+				// We use the Pathnode::parent and Flip() the path when you are finish
 				last_path.Flip();
 				return &last_path;
 			}
 		}
 	}
+
 	return nullptr;
 }
+

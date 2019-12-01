@@ -1,16 +1,19 @@
-#ifndef __j1Pathfinding_H__
-#define __j1Pathfinding_H__
+#ifndef __j1PATHFINDING_H__
+#define __j1PATHFINDING_H__
 
 #include "j1Module.h"
 #include "p2Point.h"
 #include "p2DynArray.h"
+#include "p2List.h"
+
+#include "Brofiler/Brofiler.h"
 
 #define DEFAULT_PATH_LENGTH 50
 #define INVALID_WALK_CODE 255
 
 // --------------------------------------------------
 // Recommended reading:
-// Intro: http://www.raywenderlich.com/4946/introduction-to-a-Pathfinding
+// Intro: http://www.raywenderlich.com/4946/introduction-to-a-pathfinding
 // Details: http://theory.stanford.edu/~amitp/GameProgramming/
 // --------------------------------------------------
 
@@ -27,14 +30,14 @@ enum Movement
 	DOWN_LEFT
 };
 
-class j1Pathfinding : public j1Module
+class j1PathFinding : public j1Module
 {
 public:
 
-	j1Pathfinding();
+	j1PathFinding();
 
 	// Destructor
-	~j1Pathfinding();
+	~j1PathFinding();
 
 	// Called before quitting
 	bool CleanUp();
@@ -60,18 +63,19 @@ public:
 	Movement CheckDirection(p2DynArray<iPoint>& path)const;
 	Movement CheckDirectionGround(p2DynArray<iPoint>& path)const;
 
-private:
 
+private:
+	p2DynArray<iPoint>*	_path = nullptr;
 	// size of the map
 	uint width;
 	uint height;
 	// all map walkability values [0..255]
-	uchar* map;
+	uchar* map = nullptr;
 	// we store the created path here
 	p2DynArray<iPoint> last_path;
 };
 
-// forward declaration
+/// forward declaration
 struct PathList;
 
 // ---------------------------------------------------------------------
@@ -95,7 +99,7 @@ struct PathNode
 	int g;
 	int h;
 	iPoint pos;
-	const PathNode* parent; // needed to reconstruct the path in the end
+	const PathNode* parent = nullptr; // needed to reconstruct the path in the end
 };
 
 // ---------------------------------------------------------------------
@@ -115,5 +119,4 @@ struct PathList
 };
 
 
-
-#endif // __j1Pathfinding_H__
+#endif // __j1PATHFINDING_H__
