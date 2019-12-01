@@ -4,6 +4,8 @@
 #include "j1Window.h"
 #include "j1Render.h"
 
+#include "Brofiler/Brofiler.h"
+
 #define VSYNC true
 
 j1Render::j1Render() : j1Module()
@@ -67,17 +69,23 @@ bool j1Render::Start()
 // Called each loop iteration
 bool j1Render::PreUpdate()
 {
+	BROFILER_CATEGORY("RendererPreUpdate", Profiler::Color::Orange)
+
 	SDL_RenderClear(renderer);
 	return true;
 }
 
 bool j1Render::Update(float dt)
 {
+	BROFILER_CATEGORY("RendererUpdate", Profiler::Color::LightSeaGreen)
+
 	return true;
 }
 
 bool j1Render::PostUpdate()
 {
+	BROFILER_CATEGORY("RendererPostUpdate", Profiler::Color::Yellow)
+
 	SDL_SetRenderDrawColor(renderer, background.r, background.g, background.g, background.a);
 	SDL_RenderPresent(renderer);
 	return true;

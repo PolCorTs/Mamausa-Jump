@@ -11,6 +11,8 @@
 #include "j1Scene.h"
 #include "j1Window.h"
 
+#include "Brofiler/Brofiler.h"
+
 j1Player::j1Player(int x, int y, ENTITY_TYPES type) : j1Entity(x, y, ENTITY_TYPES::PLAYER)
 {
 	animation = NULL;
@@ -54,11 +56,15 @@ bool j1Player::Start()
 
 bool j1Player::PreUpdate() 
 {
+	BROFILER_CATEGORY("PlayerPreUpdate", Profiler::Color::Orange)
+
 	return true;
 }
 
 bool j1Player::Update(float dt) 
 {
+	BROFILER_CATEGORY("PlayerUpdate", Profiler::Color::LightSeaGreen)
+	
 	if (player_start)
 	{
 		if (godMode) 
@@ -229,6 +235,8 @@ bool j1Player::Update(float dt)
 // Call modules after each loop iteration
 bool j1Player::PostUpdate() 
 {
+	BROFILER_CATEGORY("PlayerPostUpdate", Profiler::Color::Yellow)
+
 	loading = false;
 	onGround = false;
 

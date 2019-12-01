@@ -17,7 +17,7 @@ enum ENTITY_TYPES
 {
 	PLAYER,
 	BAT,
-	SPIDER,
+	Spider,
 	UNKNOWN
 };
 

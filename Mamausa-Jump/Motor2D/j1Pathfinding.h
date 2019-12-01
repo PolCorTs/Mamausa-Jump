@@ -58,6 +58,7 @@ public:
 	uchar GetTileAt(const iPoint& pos) const;
 
 	Movement CheckDirection(p2DynArray<iPoint>& path)const;
+	Movement CheckDirectionGround(p2DynArray<iPoint>& path)const;
 
 private:
 
@@ -103,7 +104,7 @@ struct PathNode
 struct PathList
 {
 	// Looks for a node in this list and returns it's list node or NULL
-	p2List_item<PathNode>* Find(const iPoint& point);
+	p2List_item<PathNode>* Find(const iPoint& point) const;
 
 	// Returns the Pathnode with lowest score in this list or NULL if empty
 	p2List_item<PathNode>* GetNodeLowestScore() const;

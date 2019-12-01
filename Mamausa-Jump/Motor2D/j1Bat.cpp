@@ -11,6 +11,8 @@
 #include "j1Map.h"
 #include "j1Scene.h"
 
+#include "Brofiler/Brofiler.h"
+
 
 j1Bat::j1Bat(int x, int y, ENTITY_TYPES type) : j1Entity(x, y, ENTITY_TYPES::BAT)
 {
@@ -43,6 +45,8 @@ bool j1Bat::Start()
 
 bool j1Bat::Update(float dt, bool do_logic)
 {
+	BROFILER_CATEGORY("BatUpdate", Profiler::Color::LightSeaGreen)
+
 		if (dead == false) {
 			collider->SetPos(position.x, position.y);
 

@@ -1,5 +1,9 @@
 #include "j1EntityManager.h"
 #include "j1Player.h"
+#include "j1Bat.h"
+#include "j1Spider.h"
+
+#include "Brofiler/Brofiler.h"
 
 j1EntityManager::j1EntityManager()
 {
@@ -26,6 +30,8 @@ bool j1EntityManager::Start()
 
 bool j1EntityManager::PreUpdate()
 {
+	BROFILER_CATEGORY("EntityManagerPreUpdate", Profiler::Color::Orange)
+	
 	for (uint i = 0; i < MAX_ENTITIES; ++i)
 	{
 		if (queue[i].type != ENTITY_TYPES::UNKNOWN)
@@ -40,6 +46,7 @@ bool j1EntityManager::PreUpdate()
 
 bool j1EntityManager::Update(float dt)
 {
+	BROFILER_CATEGORY("EntityManagerUpdate", Profiler::Color::LightSeaGreen)
 
 	for (p2List_item<j1Entity*>* iterator = entities.start; iterator != nullptr; iterator = iterator->next)
 	{
@@ -51,6 +58,7 @@ bool j1EntityManager::Update(float dt)
 
 bool j1EntityManager::PostUpdate()
 {
+	BROFILER_CATEGORY("EntityManagerPostUpdate", Profiler::Color::Yellow)
 
 	for (p2List_item<j1Entity*>* iterator = entities.start; iterator != nullptr; iterator = iterator->next)
 	{
@@ -126,7 +134,7 @@ void j1EntityManager::SpawnEnemy(const EntityInfo& info)
 			if (queue[i].type == BAT)
 				entity = new j1Bat(info.position.x, info.position.y, info.type);
 
-			else if (queue[i].type == SPIDER)
+			else if (queue[i].type == Spider)
 				entity = new j1Spider(info.position.x, info.position.y, info.type);
 
 			entities.add(entity);
@@ -156,7 +164,7 @@ void j1EntityManager::DestroyEntities()
 
 void j1EntityManager::CreatePlayer()
 {
-	player = (j1Player*)CreateEntity(PLAYER);
+	player = (j1Player*)CreateEntity(PLAYER,0,0);
 }
 
 bool j1EntityManager::Load(pugi::xml_node&)

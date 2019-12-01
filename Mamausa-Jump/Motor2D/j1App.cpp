@@ -17,6 +17,7 @@
 #include "j1FadeToBlack.h"
 #include "j1Pathfinding.h"
 
+#include "Brofiler/Brofiler.h"
 
 // Constructor
 j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
@@ -131,6 +132,8 @@ bool j1App::Start()
 // Called each loop iteration
 bool j1App::Update()
 {
+	BROFILER_CATEGORY("AppUpdate", Profiler::Color::LightSeaGreen)
+
 	bool ret = true;
 	PrepareUpdate();
 
@@ -196,6 +199,8 @@ void j1App::FinishUpdate()
 // Call modules before each loop iteration
 bool j1App::PreUpdate()
 {
+	BROFILER_CATEGORY("AppPreUpdate", Profiler::Color::Orange)
+
 	bool ret = true;
 	p2List_item<j1Module*>* item;
 	item = modules.start;
@@ -240,6 +245,8 @@ bool j1App::DoUpdate()
 // Call modules after each loop iteration
 bool j1App::PostUpdate()
 {
+	BROFILER_CATEGORY("AppPostUpdate", Profiler::Color::Yellow)
+
 	bool ret = true;
 	p2List_item<j1Module*>* item;
 	j1Module* pModule = NULL;

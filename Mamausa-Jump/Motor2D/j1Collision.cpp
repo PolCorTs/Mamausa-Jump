@@ -7,6 +7,8 @@
 #include "p2Log.h"
 #include "j1Globals.h"
 
+#include "Brofiler/Brofiler.h"
+
 
 j1Collision::j1Collision() : j1Module()
 {
@@ -52,6 +54,8 @@ j1Collision::~j1Collision()
 
 bool j1Collision::PreUpdate()
 {
+	BROFILER_CATEGORY("CollisionPreUpdate", Profiler::Color::Orange)
+
 	// Remove all colliders scheduled for deletion
 	for (uint i = 0; i < MAX_COLLIDERS; ++i)
 	{
@@ -99,6 +103,8 @@ bool j1Collision::PreUpdate()
 // Called before render is available
 bool j1Collision::Update(float dt)
 {
+	BROFILER_CATEGORY("CollisionPreUpdate", Profiler::Color::Orange)
+
 	DrawColliders();
 
 	return true;

@@ -3,6 +3,8 @@
 #include "j1App.h"
 #include "j1Pathfinding.h"
 
+#include "Brofiler/Brofiler.h"
+
 j1Pathfinding::j1Pathfinding() : j1Module(), map(NULL), last_path(DEFAULT_PATH_LENGTH), width(0), height(0)
 {
 	name.create("Pathfinding");
@@ -81,6 +83,25 @@ Movement j1Pathfinding::CheckDirection(p2DynArray<iPoint>& path) const
 	else return NONE;
 }
 
+Movement j1Pathfinding::CheckDirectionGround(p2DynArray<iPoint>& path) const
+{
+	if (path.Count() >= 2)
+	{
+		iPoint tile = path[0];
+		iPoint next_tile = path[1];
+
+		int x_difference = next_tile.x - tile.x;
+		int y_difference = next_tile.y - tile.y;
+
+		if (x_difference == 1) return RIGHT;
+		else if (x_difference == -1) return LEFT;
+		else if (y_difference == 1)	return DOWN;
+		else if (y_difference == -1) return UP;
+	}
+
+	else return NONE;
+}
+
 // To request all tiles involved in the last generated path
 const p2DynArray<iPoint>* j1Pathfinding::GetLastPath() const
 {
@@ -90,7 +111,7 @@ const p2DynArray<iPoint>* j1Pathfinding::GetLastPath() const
 // PathList ------------------------------------------------------------------------
 // Looks for a node in this list and returns it's list node or NULL
 // ---------------------------------------------------------------------------------
-p2List_item<PathNode>* PathList::Find(const iPoint& point) 
+p2List_item<PathNode>* PathList::Find(const iPoint& point) const
 {
 	p2List_item<PathNode>* item = list.start;
 	while (item)
@@ -214,6 +235,7 @@ int PathNode::CalculateF(const iPoint& destination)
 // ----------------------------------------------------------------------------------
 p2DynArray<iPoint>* j1Pathfinding::CreatePath(iPoint& origin, iPoint& destination)
 {
+	BROFILER_CATEGORY("CreatePath", Profiler::Color::SlateGray)
 
 	last_path.Clear();
 	

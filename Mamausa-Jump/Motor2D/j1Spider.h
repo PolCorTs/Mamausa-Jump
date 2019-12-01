@@ -1,5 +1,5 @@
-#ifndef __j1spider_H__
-#define __j1spider_H__
+#ifndef __j1Spider_H__
+#define __j1Spider_H__
 
 #include "PugiXml/src/pugixml.hpp"
 #include "p2Point.h"
@@ -13,13 +13,13 @@
 struct SDL_Texture;
 //struct Collider;
 
-class j1spider : public j1Entity
+class j1Spider : public j1Entity
 {
 public:
-	j1spider(int x, int y, ENTITY_TYPES type);
+	j1Spider(int x, int y, ENTITY_TYPES type);
 
 	// Destructor
-	virtual ~j1spider();
+	virtual ~j1Spider();
 
 	// Called before the first frame
 	bool Start();
@@ -37,7 +37,7 @@ public:
 	bool Load(pugi::xml_node&);
 	bool Save(pugi::xml_node&) const;
 
-	void LoadspiderProperties();
+	void LoadSpiderProperties();
 	void Move(p2DynArray<iPoint>& path, float dt);
 
 public:
@@ -60,4 +60,4 @@ public:
 	bool dead = false;
 
 };
-#endif // __j1spider_H__
+#endif // __j1Spider_H__

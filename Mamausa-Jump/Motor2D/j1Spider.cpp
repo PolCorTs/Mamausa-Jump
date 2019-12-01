@@ -1,4 +1,4 @@
-#include "j1spider.h"
+#include "j1Spider.h"
 #include "p2Defs.h"
 #include "p2Log.h"
 #include "j1App.h"
@@ -11,40 +11,43 @@
 #include "j1Map.h"
 #include "j1Scene.h"
 
+#include "Brofiler/Brofiler.h"
+
 
 #define GRAVITY 1
 
-j1spider::j1spider(int x, int y, ENTITY_TYPES type) : j1Entity(x, y, ENTITY_TYPES::SPIDER)
+j1Spider::j1Spider(int x, int y, ENTITY_TYPES type) : j1Entity(x, y, ENTITY_TYPES::Spider)
 {
 	animation = NULL;
 
-	idle.LoadEnemyAnimations("idle", "spider");
-	move.LoadEnemyAnimations("move", "spider");
+	idle.LoadEnemyAnimations("idle", "Spider");
+	move.LoadEnemyAnimations("move", "Spider");
 
-	// Setting spider position
+	// Setting Spider position
 	initialPosition.x = position.x = x;
 	initialPosition.y = position.y = y;
 }
 
-j1spider::~j1spider() {}
+j1Spider::~j1Spider() {}
 
-bool j1spider::Start()
+bool j1Spider::Start()
 {
 	// Textures are loaded
-	LOG("Loading spider textures");
-	sprites = App->tex->Load("textures/enemies/spider/zombie&spider.png");
+	LOG("Loading Spider textures");
+	sprites = App->tex->Load("textures/enemies/Spider/zombie&Spider.png");
 
-	LoadspiderProperties();
+	LoadSpiderProperties();
 
 	animation = &idle;
 
-	collider = App->collisions->AddCollider({ (int)position.x - margin.x, (int)position.y - margin.y, colliderSize.x, colliderSize.y }, COLLIDER_ENEMY, App->entity);
+	collider = App->collision->AddCollider({ (int)position.x - margin.x, (int)position.y - margin.y, colliderSize.x, colliderSize.y }, COLLIDER_ENEMY, App->entity);
 
 	return true;
 }
 
-bool j1spider::Update(float dt, bool do_logic)
+bool j1Spider::Update(float dt, bool do_logic)
 {
+	BROFILER_CATEGORY("SpiderUpdate", Profiler::Color::LightSeaGreen)
 
 		if (dead == false) {
 			collider->SetPos(position.x, position.y);
@@ -61,9 +64,9 @@ bool j1spider::Update(float dt, bool do_logic)
 					else
 						destination = { App->map->WorldToMap((int)App->entity->player->position.x, (int)App->entity->player->position.y + App->entity->player->playerSize.y / 2) };
 
-					if (App->path->IsWalkable(destination) && App->path->IsWalkable(origin))
+					if (App->pathfinding->IsWalkable(destination) && App->pathfinding->IsWalkable(origin))
 					{
-						path = App->path->CreatePath(origin, destination);
+						path = App->pathfinding->CreatePath(origin, destination);
 						Move(*path, dt);
 						path_created = true;
 					}
@@ -80,7 +83,7 @@ bool j1spider::Update(float dt, bool do_logic)
 				position = initialPosition;
 			}
 
-			// Blitting the spider
+			// Blitting the Spider
 			SDL_Rect r = animation->GetCurrentFrame(dt);
 
 			if (position.x - App->entity->player->position.x >= 0)
@@ -92,9 +95,9 @@ bool j1spider::Update(float dt, bool do_logic)
 	return true;
 }
 
-bool j1spider::CleanUp()
+bool j1Spider::CleanUp()
 {
-	LOG("Unloading spider");
+	LOG("Unloading Spider");
 	App->tex->UnLoad(sprites);
 	if (collider != nullptr)
 		collider->to_delete = true;
@@ -107,7 +110,7 @@ bool j1spider::CleanUp()
 	return true;
 }
 
-void j1spider::OnCollision(Collider * col_1, Collider * col_2)
+void j1Spider::OnCollision(Collider * col_1, Collider * col_2)
 {
 	COLLISION_DIRECTION direction;
 
@@ -138,12 +141,12 @@ void j1spider::OnCollision(Collider * col_1, Collider * col_2)
 
 }
 
-bool j1spider::Load(pugi::xml_node& data)
+bool j1Spider::Load(pugi::xml_node& data)
 {
 	return true;
 }
 
-bool j1spider::Save(pugi::xml_node& data) const
+bool j1Spider::Save(pugi::xml_node& data) const
 {
 	pugi::xml_node pos = data.append_child("position");
 
@@ -153,27 +156,27 @@ bool j1spider::Save(pugi::xml_node& data) const
 	return true;
 }
 
-void j1spider::LoadspiderProperties()
+void j1Spider::LoadSpiderProperties()
 {
 	pugi::xml_document config_file;
 	config_file.load_file("config.xml");
 	pugi::xml_node config;
 	config = config_file.child("config");
-	pugi::xml_node spider;
-	spider = config.child("spider");
+	pugi::xml_node Spider;
+	Spider = config.child("Spider");
 
-	speed = spider.attribute("speed").as_int();
+	speed = Spider.attribute("speed").as_int();
 
 	// Copying the values of the collider
-	margin.x = spider.child("margin").attribute("x").as_int();
-	margin.y = spider.child("margin").attribute("y").as_int();
-	colliderSize.x = spider.child("colliderSize").attribute("w").as_int();
-	colliderSize.y = spider.child("colliderSize").attribute("h").as_int();
+	margin.x = Spider.child("margin").attribute("x").as_int();
+	margin.y = Spider.child("margin").attribute("y").as_int();
+	colliderSize.x = Spider.child("colliderSize").attribute("w").as_int();
+	colliderSize.y = Spider.child("colliderSize").attribute("h").as_int();
 }
 
-void j1spider::Move(p2DynArray<iPoint>& path, float dt)
+void j1Spider::Move(p2DynArray<iPoint>& path, float dt)
 {
-	direction = App->path->CheckDirectionGround(path);
+	direction = App->pathfinding->CheckDirectionGround(path);
 
 	if (direction == Movement::DOWN)
 	{
