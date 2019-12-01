@@ -51,6 +51,10 @@ public:
 	void OnCollision(Collider* c1, Collider* c2);
 	void CreatePlayer();
 	void AddEnemy(int x, int y, ENTITY_TYPES type);
+	void DestroyEntities();
+
+private: 
+	void SpawnEnemy(const EntityInfo& info);
 
 
 public:

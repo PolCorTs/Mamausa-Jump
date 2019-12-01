@@ -116,9 +116,47 @@ void j1EntityManager::OnCollision(Collider* c1, Collider* c2)
 	}
 }
 
+void j1EntityManager::SpawnEnemy(const EntityInfo& info)
+{
+	for (uint i = 0; i < MAX_ENTITIES; ++i)
+	{
+		if (queue[i].type != ENTITY_TYPES::UNKNOWN)
+		{
+			j1Entity* entity;
+			if (queue[i].type == BAT)
+				entity = new j1Bat(info.position.x, info.position.y, info.type);
+
+			else if (queue[i].type == SPIDER)
+				entity = new j1Spider(info.position.x, info.position.y, info.type);
+
+			entities.add(entity);
+			entity->Start();
+			break;
+		}
+	}
+}
+
+void j1EntityManager::DestroyEntities()
+{
+	for (int i = 0; i < MAX_ENTITIES; i++)
+	{
+		queue[i].type = ENTITY_TYPES::UNKNOWN;
+	}
+
+	for (p2List_item<j1Entity*>* iterator = entities.start; iterator; iterator = iterator->next) {
+		if (iterator->data->type != ENTITY_TYPES::PLAYER)
+		{
+			iterator->data->CleanUp();
+			int num = entities.find(iterator->data);
+			RELEASE(entities.At(num)->data);
+			entities.del(entities.At(num));
+		}
+	}
+}
+
 void j1EntityManager::CreatePlayer()
 {
-	player = (j1Player*)CreateEntity(PLAYER, 0, 0);
+	player = (j1Player*)CreateEntity(PLAYER);
 }
 
 bool j1EntityManager::Load(pugi::xml_node&)
