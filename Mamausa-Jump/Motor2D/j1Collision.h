@@ -14,7 +14,17 @@ enum COLLIDER_TYPE
 	COLLIDER_PLAYER,
 	COLLIDER_END,
 	COLLIDER_DEATH,
+	COLLIDER_ENEMY,
 	COLLIDER_MAX,
+};
+
+enum COLLISION_DIRECTION
+{
+	NONE_COLLISION,
+	UP_COLLISION,
+	DOWN_COLLISION,
+	RIGHT_COLLISION,
+	LEFT_COLLISION
 };
 
 struct Collider
@@ -39,6 +49,7 @@ struct Collider
 	}
 
 	bool CheckCollision(const SDL_Rect &r) const;
+	COLLISION_DIRECTION Collider::CheckDirection(const SDL_Rect& r) const;
 };
 
 class j1Collision : public j1Module

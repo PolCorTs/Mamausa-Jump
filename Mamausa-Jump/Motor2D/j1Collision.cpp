@@ -13,28 +13,37 @@ j1Collision::j1Collision() : j1Module()
 	for (uint i = 0; i < MAX_COLLIDERS; ++i)
 		colliders[i] = nullptr;
 
-	matrix[COLLIDER_WALL][COLLIDER_WALL] = false;
-	matrix[COLLIDER_WALL][COLLIDER_PLAYER] = true;
-	matrix[COLLIDER_WALL][COLLIDER_END] = false;
-	matrix[COLLIDER_WALL][COLLIDER_DEATH] = false;
+	matrix[COLLIDER_NONE][COLLIDER_NONE] = false;
+	matrix[COLLIDER_NONE][COLLIDER_PLAYER] = false;
+	matrix[COLLIDER_NONE][COLLIDER_WALL] = false;
+	matrix[COLLIDER_NONE][COLLIDER_DEATH] = false;
+	matrix[COLLIDER_NONE][COLLIDER_ENEMY] = false;
+	
 
-	matrix[COLLIDER_NONE][COLLIDER_WALL] = true;
-	matrix[COLLIDER_WALL][COLLIDER_NONE] = true;
-
-	matrix[COLLIDER_PLAYER][COLLIDER_WALL] = true;
+	matrix[COLLIDER_PLAYER][COLLIDER_NONE] = false;
 	matrix[COLLIDER_PLAYER][COLLIDER_PLAYER] = false;
+	matrix[COLLIDER_PLAYER][COLLIDER_WALL] = true;
 	matrix[COLLIDER_PLAYER][COLLIDER_DEATH] = true;
-	matrix[COLLIDER_PLAYER][COLLIDER_END] = true;
+	matrix[COLLIDER_PLAYER][COLLIDER_ENEMY] = true;
 
-	matrix[COLLIDER_DEATH][COLLIDER_WALL] = false;
+	matrix[COLLIDER_DEATH][COLLIDER_NONE] = false;
 	matrix[COLLIDER_DEATH][COLLIDER_PLAYER] = true;
+	matrix[COLLIDER_DEATH][COLLIDER_WALL] = false;
 	matrix[COLLIDER_DEATH][COLLIDER_DEATH] = false;
-	matrix[COLLIDER_DEATH][COLLIDER_END] = false;
+	matrix[COLLIDER_DEATH][COLLIDER_ENEMY] = true;
 
-	matrix[COLLIDER_END][COLLIDER_WALL] = false;
-	matrix[COLLIDER_END][COLLIDER_PLAYER] = true;
-	matrix[COLLIDER_END][COLLIDER_DEATH] = false;
-	matrix[COLLIDER_END][COLLIDER_END] = false;
+	matrix[COLLIDER_WALL][COLLIDER_NONE] = false;
+	matrix[COLLIDER_WALL][COLLIDER_PLAYER] = true;
+	matrix[COLLIDER_WALL][COLLIDER_WALL] = false;
+	matrix[COLLIDER_WALL][COLLIDER_DEATH] = false;
+	matrix[COLLIDER_WALL][COLLIDER_ENEMY] = true;
+
+	matrix[COLLIDER_ENEMY][COLLIDER_NONE] = false;
+	matrix[COLLIDER_ENEMY][COLLIDER_PLAYER] = true;
+	matrix[COLLIDER_ENEMY][COLLIDER_WALL] = true;
+	matrix[COLLIDER_ENEMY][COLLIDER_DEATH] = true;
+	matrix[COLLIDER_ENEMY][COLLIDER_ENEMY] = false;
+
 }
 
 // Destructor
@@ -171,4 +180,25 @@ bool Collider::CheckCollision(const SDL_Rect& r) const
 		return false;
 	else
 		return true;
+}
+COLLISION_DIRECTION Collider::CheckDirection(const SDL_Rect& r) const
+{
+	if (r.x + r.w < rect.x)
+	{
+		return LEFT_COLLISION;
+	}
+
+	else if (r.x > rect.x + rect.w)
+	{
+		return RIGHT_COLLISION;
+	}
+
+	else if (r.y <= rect.y + rect.h && rect.x > r.x)
+	{
+		return UP_COLLISION;
+	}
+
+
+
+	else return NONE_COLLISION;
 }

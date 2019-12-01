@@ -16,6 +16,8 @@ class j1Player;
 enum ENTITY_TYPES
 {
 	PLAYER,
+	BAT,
+	SPIDER,
 	UNKNOWN
 };
 

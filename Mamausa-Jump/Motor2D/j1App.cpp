@@ -34,7 +34,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	collision = new j1Collision();
 	entity = new j1EntityManager();
 	fade = new j1FadeToBlack();
-	Pathfinding = new j1Pathfinding();
+	pathfinding = new j1Pathfinding();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -43,7 +43,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(tex);
 	AddModule(audio);
 	AddModule(map);
-	AddModule(Pathfinding);
+	AddModule(pathfinding);
 	AddModule(scene);
 	AddModule(collision);
 	AddModule(entity);

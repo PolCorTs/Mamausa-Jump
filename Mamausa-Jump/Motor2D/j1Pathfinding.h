@@ -14,6 +14,19 @@
 // Details: http://theory.stanford.edu/~amitp/GameProgramming/
 // --------------------------------------------------
 
+enum Movement
+{
+	NONE = -1,
+	UP,
+	DOWN,
+	RIGHT,
+	LEFT,
+	UP_RIGHT,
+	UP_LEFT,
+	DOWN_RIGHT,
+	DOWN_LEFT
+};
+
 class j1Pathfinding : public j1Module
 {
 public:
@@ -43,6 +56,8 @@ public:
 
 	// Utility: return the walkability value of a tile
 	uchar GetTileAt(const iPoint& pos) const;
+
+	Movement CheckDirection(p2DynArray<iPoint>& path)const;
 
 private:
 

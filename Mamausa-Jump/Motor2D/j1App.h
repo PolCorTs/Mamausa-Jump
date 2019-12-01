@@ -92,7 +92,7 @@ public:
 	j1Collision*		collision = nullptr;
 	j1EntityManager*	entity;
 	j1FadeToBlack*		fade;
-	j1Pathfinding*		Pathfinding = nullptr;
+	j1Pathfinding*		pathfinding = nullptr;
 
 private:
 
