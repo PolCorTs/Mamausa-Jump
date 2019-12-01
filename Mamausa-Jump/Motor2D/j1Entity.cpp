@@ -10,12 +10,10 @@ void j1Entity::Draw(SDL_Rect r, bool flip, float x, float y)
 {
 	if (flip == true)
 	{
-		App->render->Blit(sprites, x, y, &r, SDL_FLIP_NONE);
+		App->render->Blit(sprites, x + 2, y + 417, &r, SDL_FLIP_NONE);
 	}
 	else
 	{
-		App->render->Blit(sprites, x, y, &r, SDL_FLIP_HORIZONTAL);
+		App->render->Blit(sprites, x + 2, y + 417, &r, SDL_FLIP_HORIZONTAL);
 	}
-
-	//App->render->Blit(sprites, position.x + x, position.y + y, &r, SDL_FLIP_NONE);
 }

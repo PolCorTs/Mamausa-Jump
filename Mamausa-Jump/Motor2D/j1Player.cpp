@@ -312,7 +312,7 @@ void j1Player::OnCollision(Collider* c1, Collider* c2)
 				{
 					onGround = false;
 
-					verticalSpeed = 0.1f;
+					verticalSpeed = 0.01f;
 
 					LOG("TOUCHING UP");
 				}
@@ -344,16 +344,14 @@ void j1Player::OnCollision(Collider* c1, Collider* c2)
 }
 
 void j1Player::UpdateCameraPosition() {
-	if (position.x > 400) 
+	if (position.x > 400 && position.x < 7500) 
 	{
 		App->render->camera.x = -position.x + 400;
 	}
-	/*
-	if (position.y > 700 && App->render->camera.y < -400) 
+	/*if (position.y > 740) 
 	{
-		App->render->camera.y = -position.y + 350;
-	}
-	*/
+		App->render->camera.y = -position.y + 200;
+	}*/
 }
 
 void j1Player::LoadPlayerProperties() 
