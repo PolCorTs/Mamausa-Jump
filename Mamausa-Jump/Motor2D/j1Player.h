@@ -91,6 +91,9 @@ public:
 	bool dead = false;
 	bool end = false;
 
+	bool map1 = true;
+	bool map2 = false;
+
 	bool loadedAudios = false;
 };
 

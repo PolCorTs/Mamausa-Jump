@@ -36,6 +36,14 @@ bool j1Scene::Awake()
 bool j1Scene::Start()
 {
 	App->map->Load("map1.tmx");
+	/*if (App->entity->player->map1 == true) 
+	{
+		App->map->Load("map1.tmx");
+	}
+	else if (App->entity->player->map2 == true)
+	{
+		App->map->Load("map2.tmx");
+	}*/
 
 	App->entity->CreateEntity(PLAYER, 2, 17);
 
