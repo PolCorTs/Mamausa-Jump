@@ -213,6 +213,11 @@ bool j1Player::Update(float dt)
 			}
 		}
 
+		if (dead == true)
+		{
+			freefall = false;
+			animation = &death;
+		}
 		// Update collider position to player position
 
 		if (collider != nullptr) 
@@ -353,7 +358,6 @@ void j1Player::OnCollision(Collider* c1, Collider* c2)
 
 		if (c2->type == COLLIDER_DEATH) 
 		{
-			animation = &death;
 			dead = true;
 		}
 
@@ -362,7 +366,6 @@ void j1Player::OnCollision(Collider* c1, Collider* c2)
 		if (c2->type == COLLIDER_END) 
 		{
 			end = true;
-			playerCanMove = false;
 		}
 	}
 	else if (c1->type == COLLIDER_NONE)
