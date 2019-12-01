@@ -27,7 +27,21 @@
 	  <movement initialVertical="-2.0f" verticalSpeed="0.0f"/>
 	  <physics initialFalling="0.0f" fallingSpeed="0.0f" gravity="0.01f"/>
 	</speed>
-  </player>
+</player>
+
+<bat speed="5.0f">
+	  <initialPosition x="70" y="750"/>
+	  <margin x="10" y="10"/>
+	  <colliderSize w="25" h="23"/>
+  </bat>
+  
+  <spider speed="5.0f">
+      <initialPosition x="70" y="750"/>
+	  <margin x="10" y="10"/>
+	  <colliderSize w="13" h="22"/>
+  </skeleton>
+
+
 
   <file_system>
     <path>data.zip</path>
