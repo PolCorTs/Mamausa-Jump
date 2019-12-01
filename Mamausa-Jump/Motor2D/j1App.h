@@ -98,7 +98,7 @@ private:
 
 	p2List<j1Module*>	modules;
 	uint				frames;
-	float				dt;
+	float				dt = 0.0f;
 	int					argc;
 	char**				args;
 
@@ -119,7 +119,6 @@ private:
 	uint32				prev_last_sec_frame_count = 0;
 	uint32				framerate_cap = 0;
 
-	//float				dt = 0.0f;
 	bool				cappedFPS = true;
 };
 

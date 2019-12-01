@@ -67,7 +67,7 @@ const p2DynArray<iPoint>* j1Pathfinding::GetLastPath() const
 // PathList ------------------------------------------------------------------------
 // Looks for a node in this list and returns it's list node or NULL
 // ---------------------------------------------------------------------------------
-const p2List_item<PathNode>* PathList::Find(const iPoint& point) const
+p2List_item<PathNode>* PathList::Find(const iPoint& point) 
 {
 	p2List_item<PathNode>* item = list.start;
 	while (item)
@@ -140,6 +140,26 @@ uint PathNode::FindWalkableAdjacents(PathList& list_to_fill) const
 	if (App->Pathfinding->IsWalkable(cell))
 		list_to_fill.list.add(PathNode(-1, -1, cell, this));
 
+	//north-east
+	cell.create(pos.x + 1, pos.y + 1);
+	if (App->Pathfinding->IsWalkable(cell))
+		list_to_fill.list.add(PathNode(-1, -1, cell, this));
+
+	//north-west
+	cell.create(pos.x - 1, pos.y + 1);
+	if (App->Pathfinding->IsWalkable(cell))
+		list_to_fill.list.add(PathNode(-1, -1, cell, this));
+
+	// south-east
+	cell.create(pos.x + 1, pos.y - 1);
+	if (App->Pathfinding->IsWalkable(cell))
+		list_to_fill.list.add(PathNode(-1, -1, cell, this));
+
+	// south-west
+	cell.create(pos.x - 1, pos.y - 1);
+	if (App->Pathfinding->IsWalkable(cell))
+		list_to_fill.list.add(PathNode(-1, -1, cell, this));
+
 	return list_to_fill.list.count();
 }
 
@@ -157,7 +177,11 @@ int PathNode::Score() const
 int PathNode::CalculateF(const iPoint& destination)
 {
 	g = parent->g + 1;
-	h = pos.DistanceTo(destination);
+
+	int x_distance = abs(pos.x - destination.x);
+	int y_distance = abs(pos.y - destination.y);
+
+	h = (x_distance + y_distance) * min(x_distance, y_distance);
 
 	return g + h;
 }
@@ -165,9 +189,72 @@ int PathNode::CalculateF(const iPoint& destination)
 // ----------------------------------------------------------------------------------
 // Actual A* algorithm: return number of steps in the creation of the path or -1 ----
 // ----------------------------------------------------------------------------------
-int j1Pathfinding::CreatePath(const iPoint& origin, const iPoint& destination)
+p2DynArray<iPoint>* j1Pathfinding::CreatePath(iPoint& origin, iPoint& destination)
 {
 
+	last_path.Clear();
+	
+	if (IsWalkable(origin) && IsWalkable(destination)) {
 
-	return -1;
+		// Add origin	to open, iterate while there are tiles in the open list
+		PathList open, close;
+		PathNode origin(0, origin.DistanceNoSqrt(destination), origin, nullptr);
+		open.list.add(origin);
+
+		while (open.list.count() > 0)
+		{
+			// We move the lowest score cell from open list to the closed list
+			close.list.add(open.GetNodeLowestScore()->data);
+			open.list.del(open.GetNodeLowestScore());
+
+			if (close.list.end->data.pos != destination)
+			{
+				//List of adjacent nodes
+				PathList adjacent;
+
+				// Iterate adjacents
+				close.list.end->data.FindWalkableAdjacents(adjacent);
+
+				for (p2List_item<PathNode>* iterator = adjacent.list.start; iterator != nullptr; iterator = iterator->next)
+				{
+					// Ignore the closed list
+					if (close.Find(iterator->data.pos))
+						continue;
+
+					// Compare Gs between nodes
+					else if (open.Find(iterator->data.pos))
+					{
+						PathNode tmp = open.Find(iterator->data.pos)->data;
+						iterator->data.CalculateF(destination);
+						if (tmp.g > iterator->data.g)
+						{
+							// Update parent if better
+							tmp.parent = iterator->data.parent;
+						}
+					}
+					// Calculate F and add to list
+					else
+					{
+						iterator->data.CalculateF(destination);
+						open.list.add(iterator->data);
+					}
+				}
+				adjacent.list.clear();
+			}
+			else
+			{
+				for (p2List_item<PathNode>* iterator = close.list.end; iterator->data.parent != nullptr; iterator = close.Find(iterator->data.parent->pos))
+				{
+					// Create final path
+					last_path.PushBack(iterator->data.pos);
+					if (iterator->data.parent == nullptr)
+						last_path.PushBack(close.list.start->data.pos);
+				}
+
+				last_path.Flip();
+				return &last_path;
+			}
+		}
+	}
+	return nullptr;
 }

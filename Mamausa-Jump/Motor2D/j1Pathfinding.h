@@ -30,7 +30,7 @@ public:
 	void SetMap(uint width, uint height, uchar* data);
 
 	// Main function to request a path from A to B
-	int CreatePath(const iPoint& origin, const iPoint& destination);
+	p2DynArray<iPoint>* CreatePath(iPoint& origin, iPoint& destination);
 
 	// To request all tiles involved in the last generated path
 	const p2DynArray<iPoint>* GetLastPath() const;
@@ -88,7 +88,7 @@ struct PathNode
 struct PathList
 {
 	// Looks for a node in this list and returns it's list node or NULL
-	const p2List_item<PathNode>* Find(const iPoint& point) const;
+	p2List_item<PathNode>* Find(const iPoint& point);
 
 	// Returns the Pathnode with lowest score in this list or NULL if empty
 	p2List_item<PathNode>* GetNodeLowestScore() const;
