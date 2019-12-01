@@ -18,6 +18,9 @@ j1Collision::j1Collision() : j1Module()
 	matrix[COLLIDER_WALL][COLLIDER_END] = false;
 	matrix[COLLIDER_WALL][COLLIDER_DEATH] = false;
 
+	matrix[COLLIDER_NONE][COLLIDER_WALL] = true;
+	matrix[COLLIDER_WALL][COLLIDER_NONE] = true;
+
 	matrix[COLLIDER_PLAYER][COLLIDER_WALL] = true;
 	matrix[COLLIDER_PLAYER][COLLIDER_PLAYER] = false;
 	matrix[COLLIDER_PLAYER][COLLIDER_DEATH] = true;
@@ -161,8 +164,6 @@ void j1Collision::DrawColliders()
 		}
 	}
 }
-
-// -----------------------------------------------------
 
 bool Collider::CheckCollision(const SDL_Rect& r) const
 {

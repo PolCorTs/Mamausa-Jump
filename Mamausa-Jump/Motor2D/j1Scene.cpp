@@ -60,44 +60,7 @@ bool j1Scene::Update(float dt)
 		App->SaveGame("save_game.xml");
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
-		App->render->camera.y += 1;
-
-	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
-		App->render->camera.y -= 1;
-
-	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
-		App->render->camera.x += 1;
-
-	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
-		App->render->camera.x -= 1;
-
 	App->map->Draw();
-
-
-	//Camera Limits
-
-	/*
-	if (App->render->camera.x > 0)	//Limit X Start
-	{
-		App->render->camera.x = 0;
-	}
-
-	if (App->render->camera.x < -7100)	//Limit X End
-	{
-		App->render->camera.x = -7100;
-	}
-
-	if (App->render->camera.y > 0)	//Limit Y Start
-	{
-		App->render->camera.y = 0;
-	}
-
-	if (App->render->camera.y < -400)	//Limit Y End
-	{
-		App->render->camera.y = -400;
-	}
-	*/
 
 	int x, y;
 	App->input->GetMousePosition(x, y);

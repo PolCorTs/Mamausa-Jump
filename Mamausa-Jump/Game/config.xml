@@ -2,7 +2,7 @@
 
 <config>
   <app>
-<app>framerate_cap</app>
+	<app>framerate_cap</app>
     <title>Mamausa Jumps</title>
     <organization>UPC</organization>
   </app>
@@ -25,7 +25,7 @@
 	<initialPlayerPosition x="67" y="750"/>
 	<speed>
 	  <movement initialVertical="-2.0f" verticalSpeed="0.0f"/>
-	  <physics initialFalling="0.0f" fallingSpeed="0.0f" gravity="0.01f"  initialJumps="0" maxJumps="2"/>
+	  <physics initialFalling="0.0f" fallingSpeed="0.0f" gravity="0.01f"/>
 	</speed>
   </player>
 

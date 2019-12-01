@@ -89,6 +89,7 @@ public:
 	bool player_start = false;
 	bool loading = false;
 	bool dead = false;
+	bool end = false;
 
 	bool loadedAudios = false;
 };

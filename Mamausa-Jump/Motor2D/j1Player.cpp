@@ -37,6 +37,7 @@ bool j1Player::Start()
 	collider = App->collision->AddCollider({ (int)position.x, (int)position.y, playerSize.x, playerSize.y }, COLLIDER_PLAYER, App->entity);
 
 	player_start = true;
+	playerCanMove = true;
 
 	fallingSpeed = 0.0f;
 	initialFallingSpeed = 0.0f;
@@ -66,105 +67,126 @@ bool j1Player::Update(float dt)
 
 			if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT) 
 			{
+				if (wallInFront == false)
 				position.x += godModeSpeed;
 			}
 
-			if (App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_REPEAT) 
+			if (App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_REPEAT)
 			{
-				position.x -= godModeSpeed;
+				if (wallBehind == false)
+				{
+					position.x -= godModeSpeed;
+				}
 			}
 
 			if (App->input->GetKey(SDL_SCANCODE_W) == j1KeyState::KEY_REPEAT) 
 			{
-				position.y -= godModeSpeed;
+				if (wallAbove == false)
+				{
+					position.y -= godModeSpeed;
+				}
 			}
 
 			if (App->input->GetKey(SDL_SCANCODE_S) == j1KeyState::KEY_REPEAT) 
 			{
-				position.y += godModeSpeed;
+				if (onGround == false) 
+				{
+					position.y += godModeSpeed;
+				}
 			}
 		}
-		else {
-
+		else
+		{
 			if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_IDLE && App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_IDLE) 
 			{
 				animation = &idle;
 			}
 
-			if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT) 
+			if (playerCanMove == true) 
 			{
-				facingRight = true;
-
-				if (wallInFront == false) 
+				if (App->input->GetKey(SDL_SCANCODE_D) == j1KeyState::KEY_REPEAT)
 				{
-					position.x += speed;
-					animation = &run;
+					facingRight = true;
+
+					if (wallInFront == false)
+					{
+						position.x += speed;
+						animation = &run;
+					}
+					else
+					{
+						animation = &idle;
+					}
 				}
-				else 
+
+				if (App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_REPEAT)
 				{
-					animation = &idle;
+					facingRight = false;
+
+					if (wallBehind == false)
+					{
+						position.x -= speed;
+						animation = &run;
+					}
+					else
+					{
+						animation = &idle;
+					}
 				}
-			}
 
-			if (App->input->GetKey(SDL_SCANCODE_A) == j1KeyState::KEY_REPEAT) 
-			{
-				facingRight = false;
-
-				if (wallBehind == false) 
+				if (onGround == false && jumping == false)
 				{
-					position.x -= speed;
-					animation = &run;
+					freefall = true;
 				}
-				else 
+
+				if (freefall == true)
 				{
-					animation = &idle;
+					position.y += fallingSpeed;
+					fallingSpeed += gravity;
+					animation = &fall;
+					canDoubleJump = false;
 				}
-			}
 
-			if (onGround == false && jumping == false) 
-			{
-				freefall = true;
-			}
+				if (onGround)
+				{
+					jumping = false;
+					doubleJump = false;
+					canDoubleJump = true;
 
-			if (freefall == true)
-			{
-				position.y += fallingSpeed;
-				fallingSpeed += gravity;
-				animation = &fall;
-				canDoubleJump = false;
-			}
+					fallingSpeed = initialFallingSpeed;
+					verticalSpeed = initialVerticalSpeed;
+				}
 
-			if (onGround) 
-			{
-				jumping = false;
-				doubleJump = false;
-				canDoubleJump = true;
+				if (App->input->GetKey(SDL_SCANCODE_SPACE) == j1KeyState::KEY_DOWN && onGround)
+				{
+					freefall = false;
+					jumping = true;
 
-				fallingSpeed = initialFallingSpeed;
-				verticalSpeed = initialVerticalSpeed;
-			}
+					LOG("Jump");
+				}
 
-			if (App->input->GetKey(SDL_SCANCODE_SPACE) == j1KeyState::KEY_DOWN && onGround) 
-			{
-				freefall = false;
-				jumping = true;
+				else if (App->input->GetKey(SDL_SCANCODE_SPACE) == j1KeyState::KEY_DOWN && !onGround && canDoubleJump)
+				{
+					verticalSpeed = initialVerticalSpeed;
+					canDoubleJump = false;
+					doubleJump = true;
 
-				LOG("Jump");
-			}
+					LOG("DoubleJump");
+				}
 
-			else if (App->input->GetKey(SDL_SCANCODE_SPACE) == j1KeyState::KEY_DOWN && !onGround && canDoubleJump) 
-			{
-				verticalSpeed = initialVerticalSpeed;
-				canDoubleJump = false;
-				doubleJump = true;
-
-				LOG("DoubleJump");
-			}
-
-			if (jumping == true || doubleJump == true) 
-			{
-				position.y += verticalSpeed;
-				verticalSpeed += gravity;
+				if (jumping == true || doubleJump == true)
+				{
+					position.y += verticalSpeed;
+					verticalSpeed += gravity;
+					if (verticalSpeed < 0.0f)
+					{
+						animation = &jump;
+					}
+					else
+					{
+						animation = &fall;
+					}
+				}
 			}
 		}
 
@@ -323,22 +345,57 @@ void j1Player::OnCollision(Collider* c1, Collider* c2)
 
 		if (c2->type == COLLIDER_DEATH) 
 		{
-			/*if (!playedFx) {
-				App->audio->PlayFx(App->audio->deathFx);
-				playedFx = true;
-			}
-
-			animation = &deathAnim;
-			isDead = true;*/
+			animation = &death;
+			dead = true;
 		}
 
 		//Win
 
 		if (c2->type == COLLIDER_END) 
 		{
-			/*touchingWin = true;
+			end = true;
 			playerCanMove = false;
-			c2->to_delete = true;*/
+		}
+	}
+	else if (c1->type == COLLIDER_NONE)
+	{
+		if (c2->type == COLLIDER_WALL)
+		{
+			// Right & Left Collisions
+			if (c1->rect.y <= c2->rect.y + c2->rect.h && c1->rect.y + c1->rect.h - 5 >= c2->rect.y)
+			{
+				// right
+				if (c1->rect.x + c1->rect.w >= c2->rect.x && c1->rect.x <= c2->rect.x)
+				{
+					wallInFront = true;
+					wallBehind = false;
+				}
+				// left
+				else if (c1->rect.x <= c2->rect.x + c2->rect.w && c1->rect.x + c1->rect.w >= c2->rect.x + c2->rect.w)
+				{
+					wallInFront = false;
+					wallBehind = true;
+				}
+			}
+			// Up & Down Collisions
+			if (c1->rect.x + c1->rect.w >= c2->rect.x + 5 && c1->rect.x + 5 <= c2->rect.x + c2->rect.w)
+			{
+				// down
+				if (c1->rect.y + c1->rect.h >= c2->rect.y && c1->rect.y < c2->rect.y)
+				{
+					onGround = true;
+				}
+				// up
+				else if (c1->rect.y <= c2->rect.y + c2->rect.h && c1->rect.y > c2->rect.y)
+				{
+					wallAbove = true;
+					onGround = false;
+				}
+				else
+				{
+					wallAbove = false;
+				}
+			}
 		}
 	}
 }
@@ -351,7 +408,8 @@ void j1Player::UpdateCameraPosition() {
 	/*if (position.y > 740) 
 	{
 		App->render->camera.y = -position.y + 200;
-	}*/
+	}
+	*/
 }
 
 void j1Player::LoadPlayerProperties() 
