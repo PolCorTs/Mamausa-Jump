@@ -92,7 +92,7 @@ public:
 	j1Collision*		collision = nullptr;
 	j1EntityManager*	entity;
 	j1FadeToBlack*		fade;
-	j1Pathfinding*		pathfinding;
+	j1Pathfinding*		Pathfinding = nullptr;
 
 private:
 
@@ -119,7 +119,7 @@ private:
 	uint32				prev_last_sec_frame_count = 0;
 	uint32				framerate_cap = 0;
 
-	float				dt = 0.0f;
+	//float				dt = 0.0f;
 	bool				cappedFPS = true;
 };
 

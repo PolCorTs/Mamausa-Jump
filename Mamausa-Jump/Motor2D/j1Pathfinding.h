@@ -1,5 +1,5 @@
-#ifndef __j1PATHFINDING_H__
-#define __j1PATHFINDING_H__
+#ifndef __j1Pathfinding_H__
+#define __j1Pathfinding_H__
 
 #include "j1Module.h"
 #include "p2Point.h"
@@ -10,18 +10,18 @@
 
 // --------------------------------------------------
 // Recommended reading:
-// Intro: http://www.raywenderlich.com/4946/introduction-to-a-pathfinding
+// Intro: http://www.raywenderlich.com/4946/introduction-to-a-Pathfinding
 // Details: http://theory.stanford.edu/~amitp/GameProgramming/
 // --------------------------------------------------
 
-class j1PathFinding : public j1Module
+class j1Pathfinding : public j1Module
 {
 public:
 
-	j1PathFinding();
+	j1Pathfinding();
 
 	// Destructor
-	~j1PathFinding();
+	~j1Pathfinding();
 
 	// Called before quitting
 	bool CleanUp();
@@ -100,4 +100,4 @@ struct PathList
 
 
 
-#endif // __j1PATHFINDING_H__
+#endif // __j1Pathfinding_H__
