@@ -29,17 +29,19 @@
 	</speed>
 </player>
 
-<bat speed="5.0f">
-	  <initialPosition x="70" y="750"/>
-	  <margin x="10" y="10"/>
-	  <colliderSize w="25" h="23"/>
-  </bat>
+<bat>
+	<movement speed="5.0f"/>
+	<initialPosition x="70" y="750"/>
+	<margin x="10" y="10"/>
+	<colliderSize w="25" h="23"/>
+</bat>
   
-  <spider speed="5.0f">
-      <initialPosition x="70" y="750"/>
-	  <margin x="10" y="10"/>
-	  <colliderSize w="13" h="22"/>
-  </skeleton>
+<spider>
+	<movement speed="5.0f"/>
+    <initialPosition x="70" y="750"/>
+	<margin x="10" y="10"/>
+	<colliderSize w="13" h="22"/>
+</spider>
 
 
 

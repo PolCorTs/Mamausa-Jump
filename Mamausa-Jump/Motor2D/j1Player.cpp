@@ -46,7 +46,7 @@ bool j1Player::Start()
 	gravity = 0.01f; //0.02
 	verticalSpeed = 0.0f;
 	initialVerticalSpeed = -2.0f; //-2.5f
-	maxJumps = 2;
+	lives = 3;
 
 	godModeSpeed = 1; //2
 	speed = 0.5; //1.3
@@ -215,8 +215,14 @@ bool j1Player::Update(float dt)
 
 		if (dead == true)
 		{
+			playerCanMove = false;
 			freefall = false;
 			animation = &death;
+			lives--;
+			if (lives > 0) 
+			{
+				Respawn();
+			}
 		}
 		// Update collider position to player position
 
@@ -368,59 +374,34 @@ void j1Player::OnCollision(Collider* c1, Collider* c2)
 			end = true;
 		}
 	}
-	else if (c1->type == COLLIDER_NONE)
-	{
-		if (c2->type == COLLIDER_WALL)
-		{
-			// Right & Left Collisions
-			if (c1->rect.y <= c2->rect.y + c2->rect.h && c1->rect.y + c1->rect.h - 5 >= c2->rect.y)
-			{
-				// right
-				if (c1->rect.x + c1->rect.w >= c2->rect.x && c1->rect.x <= c2->rect.x)
-				{
-					wallInFront = true;
-					wallBehind = false;
-				}
-				// left
-				else if (c1->rect.x <= c2->rect.x + c2->rect.w && c1->rect.x + c1->rect.w >= c2->rect.x + c2->rect.w)
-				{
-					wallInFront = false;
-					wallBehind = true;
-				}
-			}
-			// Up & Down Collisions
-			if (c1->rect.x + c1->rect.w >= c2->rect.x + 5 && c1->rect.x + 5 <= c2->rect.x + c2->rect.w)
-			{
-				// down
-				if (c1->rect.y + c1->rect.h >= c2->rect.y && c1->rect.y < c2->rect.y)
-				{
-					onGround = true;
-				}
-				// up
-				else if (c1->rect.y <= c2->rect.y + c2->rect.h && c1->rect.y > c2->rect.y)
-				{
-					wallAbove = true;
-					onGround = false;
-				}
-				else
-				{
-					wallAbove = false;
-				}
-			}
-		}
-	}
 }
 
-void j1Player::UpdateCameraPosition() {
+void j1Player::Respawn()
+{
+	position.x = initialPosition.x;
+	position.y = initialPosition.y;
+	App->render->camera.x = -position.x + 400;
+	dead = false;
+	playerCanMove = true;
+}
+
+void j1Player::UpdateCameraPosition() 
+{
 	if (position.x > 400 && position.x < 7500) 
 	{
 		App->render->camera.x = -position.x + 400;
 	}
-	/*if (position.y > 740) 
+
+	App->render->camera.y = -position.y + 310;
+
+	/*if (position.y < 400) 
 	{
-		App->render->camera.y = -position.y + 200;
+		
 	}
-	*/
+	else 
+	{
+		App->render->camera.y = -400;
+	}*/
 }
 
 void j1Player::LoadPlayerProperties() 

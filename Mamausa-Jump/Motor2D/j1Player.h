@@ -28,6 +28,8 @@ public:
 
 	void OnCollision(Collider* c1, Collider* c2);
 
+	void Respawn();
+
 	void UpdateCameraPosition();
 	void LoadPlayerProperties();
 
